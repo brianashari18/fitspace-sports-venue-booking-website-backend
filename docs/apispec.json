@@ -161,152 +161,252 @@
     }
   },
   "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      },
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-KEY"
+      }
+    },
     "schemas": {
+      "RegisterRequest": {
+        "type": "object",
+        "properties": {
+          "username": { "type": "string", "example": "test_user" },
+          "email": { "type": "string", "example": "test@example.com" },
+          "password": { "type": "string", "example": "securepassword" }
+        },
+        "required": ["username", "email", "password"]
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "email": { "type": "string", "example": "test@example.com" },
+          "password": { "type": "string", "example": "securepassword" }
+        },
+        "required": ["email", "password"]
+      },
+      "UserUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "email": { "type": "string", "example": "user@example.com" },
+          "username": { "type": "string", "example": "user123" },
+          "password": { "type": "string", "example": "hashedpassword" },
+          "avatar": { "type": "string", "example": "https://example.com/avatar.jpg" }
+        }
+      },
+      "UserDataResponse": {
+        "type": "object",
+        "properties": {
+          "code": { "type": "number", "example": 200 },
+          "status": { "type": "string", "example": "OK" },
+          "data": {
+            "type": "object",
+            "properties": {
+              "username": { "type": "string", "example": "test_user" },
+              "email": { "type": "string", "example": "test@example.com" }
+            }
+          }
+        }
+      },
+      "ManyUserDataResponse": {
+        "type": "object",
+        "properties": {
+          "code": { "type": "number", "example": 200 },
+          "status": { "type": "string", "example": "OK" },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "username": { "type": "string", "example": "test_user" },
+                "email": { "type": "string", "example": "test@example.com" }
+              }
+            }
+          }
+        },
+        "example": {
+          "code": 200,
+          "status": "OK",
+          "data": [
+            { "username": "john_doe", "email": "john.doe@example.com" },
+            { "username": "jane_smith", "email": "jane.smith@example.com" },
+            { "username": "alice_wonder", "email": "alice.wonder@example.com" }
+          ]
+        }
+      },
+      "AddUpdateVenueRequest": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "example": "Sport Center A" },
+          "address": { "type": "string", "example": "123 Main Street" },
+          "facilities": { "type": "array", "items": { "type": "string" }, "example": ["WiFi", "Parking"] },
+          "latitude": { "type": "number", "example": -6.2088 },
+          "longitude": { "type": "number", "example": 106.8456 },
+          "gallery": { "type": "array", "items": { "type": "string" }, "example": ["https://example.com/img1.jpg", "https://example.com/img2.jpg"] },
+          "rating": { "type": "number", "example": 4.5 },
+          "reviews_count": { "type": "integer", "example": 25 },
+          "created_at": { "type": "string", "format": "date-time", "example": "2024-01-01T12:00:00Z" },
+          "updated_at": { "type": "string", "format": "date-time", "example": "2024-01-01T12:00:00Z" }
+        }
+      },
       "User": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "email": {
-            "type": "string",
-            "format": "email"
-          },
-          "username": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string",
-            "format": "password"
-          },
-          "avatar": {
-            "type": "string",
-            "format": "uri"
-          },
-          "role": {
-            "type": "string",
-            "enum": ["user", "venue_owner", "admin"]
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updated_at": {
-            "type": "string",
-            "format": "date-time"
-          }
+          "id": { "type": "integer", "example": 1 },
+          "email": { "type": "string", "example": "user@example.com" },
+          "username": { "type": "string", "example": "user123" },
+          "password": { "type": "string", "example": "hashedpassword" },
+          "avatar": { "type": "string", "example": "https://example.com/avatar.jpg" },
+          "role": { "type": "string", "example": "user" },
+          "created_at": { "type": "string", "format": "date-time", "example": "2024-01-01T12:00:00Z" },
+          "updated_at": { "type": "string", "format": "date-time", "example": "2024-01-01T12:00:00Z" }
         }
       },
       "Venue": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "owner_id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string"
-          },
-          "address": {
-            "type": "string"
-          },
-          "facilities": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "latitude": {
-            "type": "number",
-            "format": "float"
-          },
-          "longitude": {
-            "type": "number",
-            "format": "float"
-          },
-          "gallery": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "uri"
-            }
-          },
-          "rating": {
-            "type": "number",
-            "format": "float"
-          },
-          "reviews_count": {
-            "type": "integer"
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updated_at": {
-            "type": "string",
-            "format": "date-time"
-          }
+          "id": { "type": "integer", "example": 1 },
+          "owner_id": { "type": "integer", "example": 2 },
+          "name": { "type": "string", "example": "Sport Center A" },
+          "address": { "type": "string", "example": "123 Main Street" },
+          "facilities": { "type": "array", "items": { "type": "string" }, "example": ["WiFi", "Parking"] },
+          "latitude": { "type": "number", "example": -6.2088 },
+          "longitude": { "type": "number", "example": 106.8456 },
+          "gallery": { "type": "array", "items": { "type": "string" }, "example": ["https://example.com/img1.jpg", "https://example.com/img2.jpg"] },
+          "rating": { "type": "number", "example": 4.5 },
+          "reviews_count": { "type": "integer", "example": 25 },
+          "created_at": { "type": "string", "format": "date-time", "example": "2024-01-01T12:00:00Z" },
+          "updated_at": { "type": "string", "format": "date-time", "example": "2024-01-01T12:00:00Z" }
+        }
+      },
+      "Schedule": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "venue_id": { "type": "integer", "example": 1 },
+          "date": { "type": "string", "format": "date", "example": "2024-01-01" },
+          "time_slot": { "type": "string", "example": "06:00 - 07:00" },
+          "price": { "type": "number", "example": 50.00 },
+          "status": { "type": "string", "example": "available" },
+          "created_at": { "type": "string", "format": "date-time", "example": "2024-01-01T12:00:00Z" },
+          "updated_at": { "type": "string", "format": "date-time", "example": "2024-01-01T12:00:00Z" }
+        }
+      },
+      "Review": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "venue_id": { "type": "integer", "example": 1 },
+          "user_id": { "type": "integer", "example": 3 },
+          "rating": { "type": "number", "example": 4.5 },
+          "comment": { "type": "string", "example": "Great venue!" },
+          "photos": { "type": "array", "items": { "type": "string" }, "example": ["https://example.com/review1.jpg"] },
+          "created_at": { "type": "string", "format": "date-time", "example": "2024-01-01T12:00:00Z" },
+          "updated_at": { "type": "string", "format": "date-time", "example": "2024-01-01T12:00:00Z" }
         }
       },
       "Booking": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "user_id": {
-            "type": "integer"
-          },
-          "venue_id": {
-            "type": "integer"
-          },
-          "facility": {
-            "type": "string"
-          },
-          "date": {
-            "type": "string",
-            "format": "date"
-          },
-          "time_slot": {
-            "type": "string"
-          },
-          "price": {
-            "type": "number",
-            "format": "float"
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date-time"
-          }
+          "id": { "type": "integer", "example": 1 },
+          "user_id": { "type": "integer", "example": 3 },
+          "venue_id": { "type": "integer", "example": 2 },
+          "facility": { "type": "string", "example": "Basketball Court" },
+          "date": { "type": "string", "format": "date", "example": "2024-01-01" },
+          "time_slot": { "type": "string", "example": "06:00 - 07:00" },
+          "price": { "type": "number", "example": 100.00 },
+          "created_at": { "type": "string", "format": "date-time", "example": "2024-01-01T12:00:00Z" }
+        }
+      },
+      "PaymentMethod": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "name": { "type": "string", "example": "E-Wallet" },
+          "provider": { "type": "string", "example": "Gopay" },
+          "type": { "type": "string", "example": "e_wallet" },
+          "fee": { "type": "number", "example": 2.00 },
+          "min_amount": { "type": "number", "example": 10.00 },
+          "max_amount": { "type": "number", "example": null },
+          "created_at": { "type": "string", "format": "date-time", "example": "2024-01-01T12:00:00Z" },
+          "updated_at": { "type": "string", "format": "date-time", "example": "2024-01-01T12:00:00Z" }
         }
       },
       "Payment": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "booking_id": {
-            "type": "integer"
-          },
-          "payment_method_id": {
-            "type": "integer"
-          },
-          "total_amount": {
+          "id": { "type": "integer", "example": 1 },
+          "booking_id": { "type": "integer", "example": 2 },
+          "payment_method_id": { "type": "integer", "example": 1 },
+          "total_amount": { "type": "number", "example": 150.00 },
+          "payment_status": { "type": "string", "example": "completed" },
+          "created_at": { "type": "string", "format": "date-time", "example": "2024-01-01T12:00:00Z" }
+        }
+      },
+      "TokenResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
             "type": "number",
-            "format": "float"
+            "example": 200
           },
-          "payment_status": {
+          "status": {
             "type": "string",
-            "enum": ["pending", "completed", "failed"]
+            "example": "OK"
           },
-          "created_at": {
-            "type": "string",
-            "format": "date-time"
+          "data": {
+            "type": "object",
+            "properties": {
+              "token": { "type": "string", "example": "token-unique" }
+            }
           }
         }
+      },
+      "DeleteMessageResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "number",
+            "example": 200
+          },
+          "status": {
+            "type": "string",
+            "example": "OK"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "number",
+            "example": 400
+          },
+          "status": {
+            "type": "string",
+            "example": "BAD REQUEST"
+          },
+          "errors": { "type": "string", "example": "Detailed error message" }
+        }
+      }
+    },
+    "parameters": {
+      "BearerAuthorizationHeader": {
+        "name": "Authorization",
+        "in": "header",
+        "required": true,
+        "schema": { "type": "string" }
+      },
+      "ApiKeyAuthorizationHeader": {
+        "name": "X-API-KEY",
+        "in": "header",
+        "required": true,
+        "schema": { "type": "string" }
       }
     }
   }

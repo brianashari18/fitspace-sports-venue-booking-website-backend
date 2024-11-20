@@ -1,0 +1,342 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "FitSpace Venue API Spec",
+    "description": "API specification for FitSpace venues",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/venues": {
+      "get": {
+        "tags": ["Venue"],
+        "summary": "Get all venues",
+        "description": "Retrieve a list of all available venues",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "example": 1 },
+            "description": "Page number for pagination"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "example": 10 },
+            "description": "Number of venues per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of venues retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": { "type": "number", "example": 200 },
+                    "status": { "type": "string", "example": "OK" },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/VenueDataResponse"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid query parameters",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Venue"],
+        "summary": "Create a new venue",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/VenueCreateRequest" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Venue created successfully",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/VenueDataResponse" }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/venues/{id}": {
+      "get": {
+        "tags": ["Venue"],
+        "summary": "Get venue by ID",
+        "description": "Retrieve details of a specific venue by its ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "example": 1 },
+            "description": "ID of the venue"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Venue details retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/VenueDataResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Venue not found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Venue"],
+        "summary": "Update venue details",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "example": 1 },
+            "description": "ID of the venue"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/VenueUpdateRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Venue updated successfully",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/VenueDataResponse" }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid update data",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Venue not found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Venue"],
+        "summary": "Delete a venue",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "example": 1 },
+            "description": "ID of the venue"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Venue deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/DeleteMessageResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Venue not found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      },
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-KEY"
+      }
+    },
+    "schemas": {
+      "VenueDataResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "owner_id": { "type": "integer", "example": 1 },
+          "name": { "type": "string", "example": "FitSpace Sport Center" },
+          "address": { "type": "string", "example": "123 Main Street" },
+          "facilities": {
+            "type": "array",
+            "items": { "type": "string" },
+            "example": [
+              "Futsal", "Badminton"
+            ]
+          },
+          "latitude": { "type": "number", "format": "decimal", "example": 37.7749 },
+          "longitude": { "type": "number", "format": "decimal", "example": -122.4194 },
+          "gallery": {
+            "type": "array",
+            "items": { "type": "string" },
+            "example": [
+              "https://example.com/gallery1.jpg",
+              "https://example.com/gallery2.jpg"
+            ]
+          },
+          "rating": { "type": "number", "example": 4.5 },
+          "reviews_count": { "type": "integer", "example": 100 },
+          "created_at": { "type": "string", "format": "date-time", "example": "2024-01-01T12:00:00Z" },
+          "updated_at": { "type": "string", "format": "date-time", "example": "2024-01-10T12:00:00Z" }
+        }
+      },
+      "VenueCreateRequest": {
+        "type": "object",
+        "properties": {
+          "owner_id": { "type": "integer", "example": 1 },
+          "name": { "type": "string", "example": "FitSpace Gym" },
+          "address": { "type": "string", "example": "123 Main Street" },
+          "facilities": {
+            "type": "array",
+            "items": { "type": "string", "example": "Parking" }
+          },
+          "latitude": { "type": "number", "format": "decimal", "example": 37.7749 },
+          "longitude": { "type": "number", "format": "decimal", "example": -122.4194 },
+          "gallery": {
+            "type": "array",
+            "items": { "type": "string", "example": "https://example.com/gallery1.jpg" }
+          }
+        },
+        "required": ["owner_id", "name", "address", "latitude", "longitude"]
+      },
+      "VenueUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "example": "FitSpace Gym Updated" },
+          "address": { "type": "string", "example": "123 Updated Main Street" },
+          "facilities": {
+            "type": "array",
+            "items": { "type": "string", "example": "Free WiFi" }
+          },
+          "latitude": { "type": "number", "format": "decimal", "example": 37.7749 },
+          "longitude": { "type": "number", "format": "decimal", "example": -122.4194 },
+          "gallery": {
+            "type": "array",
+            "items": { "type": "string", "example": "https://example.com/updated-gallery1.jpg" }
+          }
+        }
+      },
+      "DeleteMessageResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "number",
+            "example": 200
+          },
+          "status": {
+            "type": "string",
+            "example": "OK"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "number",
+            "example": 400
+          },
+          "status": {
+            "type": "string",
+            "example": "BAD REQUEST"
+          },
+          "errors": { "type": "string", "example": "Detailed error message" }
+        }
+      }
+    },
+    "parameters": {
+      "BearerAuthorizationHeader": {
+        "name": "Authorization",
+        "in": "header",
+        "required": true,
+        "schema": { "type": "string" }
+      },
+      "ApiKeyAuthorizationHeader": {
+        "name": "X-API-KEY",
+        "in": "header",
+        "required": true,
+        "schema": { "type": "string" }
+      }
+    }
+  }
+}
