@@ -1,6 +1,7 @@
 package fitspace.fitspace_sports_venue_booking_website_backend.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import fitspace.fitspace_sports_venue_booking_website_backend.validation.PasswordMatches;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -12,7 +13,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class RegisterUserRequest {
+@PasswordMatches
+public class UserRegisterRequest {
 
     @NotBlank
     @Size(max = 100)
@@ -30,4 +32,10 @@ public class RegisterUserRequest {
     @NotBlank
     @Size(min = 8, max = 100)
     private String password;
+
+    @NotBlank
+    @Size(min = 8, max = 100)
+    @JsonProperty("confirmation_password")
+    private String confirmationPassword;
 }
+

@@ -39,6 +39,24 @@ public class User {
 
     private String role = "user";
 
+    @Column(unique = true)
+    private String token;
+
+    @Column(name = "token_expired_at")
+    private LocalDateTime tokenExpiredAt;
+
+    @Column(unique = true)
+    private String otp;
+
+    @Column(name = "otp_expired_at")
+    private LocalDateTime otpExpiredAt;
+
+    @Column(unique = true, name = "reset_token")
+    private String resetToken;
+
+    @Column(name = "reset_token_expired_at")
+    private LocalDateTime resetTokenExpiredAt;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 

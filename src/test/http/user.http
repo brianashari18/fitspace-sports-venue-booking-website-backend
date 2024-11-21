@@ -3,8 +3,64 @@ POST http://localhost:8080/api/users
 Content-Type: application/json
 
 {
-  "email": "test@example.com",
-  "first_name": "test",
-  "last_name": "test",
+  "email": "brianashari318@gmail.com",
+  "first_name": "Brian",
+  "last_name": "Anashari",
+  "password": "test1234",
+  "confirmation_password": "test1234"
+}
+
+### Login User
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "brianashari318@gmail.com",
   "password": "test1234"
+}
+
+### Get User
+GET http://localhost:8080/api/users/current
+Authorization: f040cbea-9129-4627-b3c3-bf25110f6891
+
+### Update User
+PATCH http://localhost:8080/api/users/current
+Authorization: f040cbea-9129-4627-b3c3-bf25110f6891
+Content-Type: application/json
+
+{
+  "first_name": "testUpdate",
+  "last_name": "testUpdate",
+  "avatar": "testUpdate"
+}
+
+### Logout User
+DELETE http://localhost:8080/api/auth/logout
+Authorization: 88301d7b-53b9-40a2-9c37-34bc0aa808f1
+
+### Forgot Password
+POST http://localhost:8080/api/auth/forgot-password
+Content-Type: application/json
+
+{
+  "email": "brianashari318@gmail.com"
+}
+
+### Validate OTP
+POST http://localhost:8080/api/auth/validate-otp
+Content-Type: application/json
+
+{
+  "otp": "salah"
+}
+
+### Reset Password
+PATCH http://localhost:8080/api/auth/reset-password
+Authorization:
+Reset-Token: 6fa63103-0ef7-49a2-bc8b-1f14cce6f6ae
+Content-Type: application/json
+
+{
+  "new_password": "newpasswordtest",
+  "confirmation_password": "newpasswordtest"
 }
