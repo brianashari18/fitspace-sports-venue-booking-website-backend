@@ -3,9 +3,9 @@ POST http://localhost:8080/api/users
 Content-Type: application/json
 
 {
-  "email": "brianashari318@gmail.com",
-  "first_name": "Brian",
-  "last_name": "Anashari",
+  "email": "text2@example.com",
+  "first_name": "test",
+  "last_name": "test",
   "password": "test1234",
   "confirmation_password": "test1234"
 }
@@ -15,13 +15,13 @@ POST http://localhost:8080/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "brianashari318@gmail.com",
+  "email": "text2@example.com",
   "password": "test1234"
 }
 
 ### Get User
 GET http://localhost:8080/api/users/current
-Authorization: f040cbea-9129-4627-b3c3-bf25110f6891
+Authorization: 625b20e9-2189-4574-82b9-e62024b3926c
 
 ### Update User
 PATCH http://localhost:8080/api/users/current

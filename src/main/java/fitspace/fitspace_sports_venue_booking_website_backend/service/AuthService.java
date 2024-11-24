@@ -1,11 +1,12 @@
 package fitspace.fitspace_sports_venue_booking_website_backend.service;
 
 import fitspace.fitspace_sports_venue_booking_website_backend.entity.User;
+import fitspace.fitspace_sports_venue_booking_website_backend.helper.EnvHelper;
 import fitspace.fitspace_sports_venue_booking_website_backend.model.*;
 import fitspace.fitspace_sports_venue_booking_website_backend.repository.UserRepository;
 import fitspace.fitspace_sports_venue_booking_website_backend.security.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -25,6 +26,8 @@ public class AuthService {
     @Autowired
     private EmailService emailService;
 
+    private EnvHelper envHelper;
+
     @Transactional
     public TokenResponse login(UserLoginRequest request) {
         validationService.validate(request);
@@ -33,14 +36,7 @@ public class AuthService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email or password wrong"));
 
         if (BCrypt.checkpw(request.getPassword(), user.getPassword())) {
-            user.setToken(UUID.randomUUID().toString());
-            user.setTokenExpiredAt(LocalDateTime.now().plusHours(5));
-            userRepository.save(user);
-
-            return TokenResponse.builder()
-                    .token(user.getToken())
-                    .expiredAt(user.getTokenExpiredAt())
-                    .build();
+            return this.setToken(user);
         } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email or password wrong");
         }
@@ -100,5 +96,16 @@ public class AuthService {
         userRepository.save(user);
         user.setResetToken(null);
         user.setResetTokenExpiredAt(null);
+    }
+
+    private TokenResponse setToken(User user) {
+        user.setToken(UUID.randomUUID().toString());
+        user.setTokenExpiredAt(LocalDateTime.now().plusHours(5));
+        userRepository.save(user);
+
+        return TokenResponse.builder()
+                .token(user.getToken())
+                .expiredAt(user.getTokenExpiredAt())
+                .build();
     }
 }

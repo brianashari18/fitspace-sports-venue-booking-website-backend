@@ -1,0 +1,45 @@
+### Create Venue
+POST http://localhost:8080/api/venues
+Authorization: 625b20e9-2189-4574-82b9-e62024b3926c
+Content-Type: application/json
+
+{
+  "name": "FitSpace Sports Arena",
+  "phoneNumber": "+6281234567890",
+  "street": "Jalan Raya Sport No. 123",
+  "district": "Kecamatan Sporty",
+  "cityOrRegency": "Kota Atletik",
+  "province": "Provinsi Kompetisi",
+  "country": "Indonesia",
+  "postalCode": "12345",
+  "latitude": -6.200000,
+  "longitude": 106.816666
+}
+
+### Get Venue
+GET http://localhost:8080/api/venues/2
+
+### Update Venue
+PATCH http://localhost:8080/api/venues/2
+Authorization: 625b20e9-2189-4574-82b9-e62024b3926c
+Content-Type: application/json
+
+{
+  "name": "testUpdate",
+  "phoneNumber": "+1234",
+  "country": "testUpdate",
+  "postalCode": "testUpdate",
+  "latitude": -6.200000,
+  "longitude": 106.816666
+}
+
+### Delete Venue
+DELETE http://localhost:8080/api/venues/1
+Authorization: 625b20e9-2189-4574-82b9-e62024b3926c
+
+### Get All Venue
+GET http://localhost:8080/api/venues
+
+### Get All Venue From Some Owner
+GET http://localhost:8080/api/users/5/venues
+Authorization: 625b20e9-2189-4574-82b9-e62024b3926c
