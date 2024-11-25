@@ -18,7 +18,8 @@ import java.util.List;
 public class Venue {
 
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     private String name;
 
@@ -58,7 +59,7 @@ public class Venue {
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
     private User owner;
 
-    @OneToMany(mappedBy = "venue")
+    @OneToMany(mappedBy = "venue", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Photo> gallery;
 
     @OneToMany(mappedBy = "venue")

@@ -21,7 +21,7 @@ Content-Type: application/json
 
 ### Get User
 GET http://localhost:8080/api/users/current
-Authorization: 625b20e9-2189-4574-82b9-e62024b3926c
+Authorization: b9ceb420-6e80-4def-84b4-cb2263a51ca9
 
 ### Update User
 PATCH http://localhost:8080/api/users/current
@@ -36,7 +36,7 @@ Content-Type: application/json
 
 ### Logout User
 DELETE http://localhost:8080/api/auth/logout
-Authorization: 88301d7b-53b9-40a2-9c37-34bc0aa808f1
+Authorization: b9ceb420-6e80-4def-84b4-cb2263a51ca9
 
 ### Forgot Password
 POST http://localhost:8080/api/auth/forgot-password

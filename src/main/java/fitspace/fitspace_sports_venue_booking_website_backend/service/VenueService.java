@@ -1,10 +1,10 @@
 package fitspace.fitspace_sports_venue_booking_website_backend.service;
 
+import fitspace.fitspace_sports_venue_booking_website_backend.entity.Photo;
 import fitspace.fitspace_sports_venue_booking_website_backend.entity.User;
 import fitspace.fitspace_sports_venue_booking_website_backend.entity.Venue;
-import fitspace.fitspace_sports_venue_booking_website_backend.model.VenueAddRequest;
-import fitspace.fitspace_sports_venue_booking_website_backend.model.VenueDataResponse;
-import fitspace.fitspace_sports_venue_booking_website_backend.model.VenueUpdateRequest;
+import fitspace.fitspace_sports_venue_booking_website_backend.model.*;
+import fitspace.fitspace_sports_venue_booking_website_backend.repository.PhotoRepository;
 import fitspace.fitspace_sports_venue_booking_website_backend.repository.VenueRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapperImpl;
@@ -43,6 +43,14 @@ public class VenueService {
                 .rating(venue.getRating())
                 .reviewsCount(venue.getReviewsCount())
                 .ownerId(venue.getOwner().getId())
+                .gallery(venue.getGallery().stream().map(photo -> {
+                    return PhotoDataResponse.builder()
+                            .id(photo.getId())
+                            .photoUrl(photo.getPhotoUrl())
+                            .description(photo.getDescription())
+                            .venueId(photo.getVenue().getId())
+                            .build();
+                }).toList())
                 .build();
     }
 
@@ -63,13 +71,25 @@ public class VenueService {
         venue.setLongitude(request.getLongitude());
         venue.setOwner(user);
 
+        List<Photo> gallery = request.getPhotoAddRequests().stream().map(photoAddRequest -> {
+            validationService.validate(photoAddRequest);
+            Photo photo = new Photo();
+            photo.setPhotoUrl(photoAddRequest.getPhotoUrl());
+            photo.setDescription(photoAddRequest.getDescription());
+            photo.setVenue(venue);
+            return photo;
+        }).toList();
+
+        venue.setGallery(gallery);
         venueRepository.save(venue);
+
         return toVenueDataResponse(venue);
     }
 
+
     @Transactional(readOnly = true)
     public VenueDataResponse get(Integer id) {
-        Venue venue = venueRepository.findById(String.valueOf(id))
+        Venue venue = venueRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Venue not found"));
 
         return toVenueDataResponse(venue);
@@ -123,11 +143,7 @@ public class VenueService {
     }
 
     @Transactional(readOnly = true)
-    public List<VenueDataResponse> getAllFromOwner(User user, Integer ownerId) {
-        if (!user.getId().equals(ownerId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Wrong owner id");
-        }
-
+    public List<VenueDataResponse> getAllFromOwner(User user) {
         List<Venue> venues = venueRepository.findAllByOwner(user);
 
         if (venues.isEmpty()) {

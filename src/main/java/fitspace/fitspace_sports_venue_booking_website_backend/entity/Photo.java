@@ -17,7 +17,8 @@ import java.time.LocalDateTime;
 public class Photo {
 
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @Column(name = "photo_url")
     private String photoUrl;

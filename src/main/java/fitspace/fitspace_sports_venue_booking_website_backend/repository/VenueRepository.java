@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface VenueRepository extends JpaRepository<Venue, String> {
-    Optional<Venue> findFirstByOwnerAndId(User owner, int id);
+public interface VenueRepository extends JpaRepository<Venue, Integer> {
+    Optional<Venue> findFirstByOwnerAndId(User owner, Integer id);
     List<Venue> findAllByOwner(User owner);
 }

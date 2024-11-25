@@ -18,7 +18,8 @@ import java.util.List;
 public class Field {
 
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     private String type;
 

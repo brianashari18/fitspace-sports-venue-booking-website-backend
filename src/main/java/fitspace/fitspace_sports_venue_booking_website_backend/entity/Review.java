@@ -17,7 +17,8 @@ import java.time.LocalDateTime;
 public class Review {
 
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     private String type;
 

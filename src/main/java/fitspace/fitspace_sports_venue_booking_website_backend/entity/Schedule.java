@@ -18,7 +18,8 @@ import java.time.LocalDateTime;
 public class Schedule {
 
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     private LocalDate date;
 

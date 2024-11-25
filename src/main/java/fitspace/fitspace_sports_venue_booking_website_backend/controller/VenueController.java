@@ -87,11 +87,11 @@ public class VenueController {
     }
 
     @GetMapping(
-            path = "/api/users/{userId}/venues",
+            path = "/api/venues/public",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public WebResponse<List<VenueDataResponse>> getAllFromOwner(User user, @PathVariable("userId") Integer userId) {
-        List<VenueDataResponse> venueDataResponses = venueService.getAllFromOwner(user, userId);
+    public WebResponse<List<VenueDataResponse>> getAllFromOwner(User user) {
+        List<VenueDataResponse> venueDataResponses = venueService.getAllFromOwner(user);
         return WebResponse.<List<VenueDataResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .status(HttpStatus.OK.getReasonPhrase())

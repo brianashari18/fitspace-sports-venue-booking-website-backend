@@ -1,5 +1,7 @@
 package fitspace.fitspace_sports_venue_booking_website_backend.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import fitspace.fitspace_sports_venue_booking_website_backend.entity.Photo;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,18 +20,21 @@ public class VenueDataResponse {
 
     private String name;
 
+    @JsonProperty("phone_number")
     private String phoneNumber;
 
     private String street;
 
     private String district;
 
+    @JsonProperty("city_or_regency")
     private String cityOrRegency;
 
     private String province;
 
     private String country;
 
+    @JsonProperty("postal_code")
     private String postalCode;
 
     private Double latitude;
@@ -38,9 +43,11 @@ public class VenueDataResponse {
 
     private Double rating;
 
+    @JsonProperty("reviews_count")
     private Integer reviewsCount;
 
+    @JsonProperty("owner_id")
     private Integer ownerId;
 
-    private List<String> field_types;
+    private List<PhotoDataResponse> gallery;
 }

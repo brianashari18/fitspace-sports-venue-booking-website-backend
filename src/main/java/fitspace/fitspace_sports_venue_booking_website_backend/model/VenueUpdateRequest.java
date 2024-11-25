@@ -1,10 +1,14 @@
 package fitspace.fitspace_sports_venue_booking_website_backend.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import fitspace.fitspace_sports_venue_booking_website_backend.entity.Photo;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -17,6 +21,7 @@ public class VenueUpdateRequest {
 
     @Pattern(regexp = "\\+?[0-9]*")
     @Size(max = 100)
+    @JsonProperty("phone_number")
     private String phoneNumber;
 
     @Size(max = 255)
@@ -26,6 +31,7 @@ public class VenueUpdateRequest {
     private String district;
 
     @Size(max = 100)
+    @JsonProperty("city_or_regency")
     private String cityOrRegency;
 
     @Size(max = 100)
@@ -35,6 +41,7 @@ public class VenueUpdateRequest {
     private String country;
 
     @Size(max = 10)
+    @JsonProperty("postal_code")
     private String postalCode;
 
     @DecimalMin(value = "-90.0")
@@ -45,4 +52,5 @@ public class VenueUpdateRequest {
     @DecimalMax(value = "180.0")
     private Double longitude;
 
+    private List<PhotoUpdateRequest> photoUpdateRequests;
 }
