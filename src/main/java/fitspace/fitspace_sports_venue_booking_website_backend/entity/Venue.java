@@ -67,4 +67,7 @@ public class Venue {
 
     @OneToMany(mappedBy = "venue")
     private List<Review> reviews;
+
+    @OneToMany(mappedBy = "venue")
+    private List<Booking> bookings;
 }
