@@ -20,13 +20,9 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String type;
-
-    private int rating;
+    private Integer rating;
 
     private String comment;
-
-    private String photo;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -35,8 +31,8 @@ public class Review {
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     @ManyToOne
-    @JoinColumn(name = "venue_id", referencedColumnName = "id")
-    private Venue venue;
+    @JoinColumn(name = "field_id", referencedColumnName = "id")
+    private Field field;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")

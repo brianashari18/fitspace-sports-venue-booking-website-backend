@@ -1,8 +1,8 @@
-package fitspace.fitspace_sports_venue_booking_website_backend.model;
+package fitspace.fitspace_sports_venue_booking_website_backend.dto.venue;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import fitspace.fitspace_sports_venue_booking_website_backend.entity.Photo;
-import jakarta.validation.constraints.*;
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.field.FieldDataResponse;
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.photo.PhotoDataResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -49,5 +49,5 @@ public class VenueDataResponse {
     @JsonProperty("owner_id")
     private Integer ownerId;
 
-    private List<PhotoDataResponse> gallery;
+    private List<FieldDataResponse> fields;
 }

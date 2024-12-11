@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -23,19 +24,17 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "user_id")
-    private int userId;
+    private String status;
 
-    @Column(name = "venue_id")
-    private int venueId;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    private String facility;
-    private LocalDate date;
+    @ManyToOne
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    private User customer;
 
-    @Column(name = "time_slot")
-    private String timeSlot;
-    private double price;
-    private Timestamp timestamp;
-
+    @OneToOne
+    @JoinColumn(name = "schedule_id", referencedColumnName = "id")
+    private Schedule schedule;
 
 }

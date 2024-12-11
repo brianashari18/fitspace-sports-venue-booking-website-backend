@@ -21,28 +21,9 @@ public class Field {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private Long price;
+
     private String type;
-
-    @Column(name = "floor_type")
-    private String floorType;
-
-    @Column(name = "court_length")
-    private double courtLength;
-
-    @Column(name = "court_width")
-    private double courtWidth;
-
-    @Column(name = "net_height")
-    private double netHeight;
-
-    @Column(name = "goal_width")
-    private double goalWidth;
-
-    @Column(name = "goal_height")
-    private double goalHeight;
-
-    @Column(name = "ring_height")
-    private double ringHeight;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -53,6 +34,9 @@ public class Field {
     @ManyToOne
     @JoinColumn(name = "venue_id", referencedColumnName = "id")
     private Venue venue;
+
+    @OneToMany(mappedBy = "field")
+    private List<Photo> gallery;
 
     @OneToMany(mappedBy = "field")
     private List<Schedule> schedules;

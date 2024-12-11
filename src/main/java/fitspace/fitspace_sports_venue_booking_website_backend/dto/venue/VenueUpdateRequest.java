@@ -1,7 +1,7 @@
-package fitspace.fitspace_sports_venue_booking_website_backend.model;
+package fitspace.fitspace_sports_venue_booking_website_backend.dto.venue;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import fitspace.fitspace_sports_venue_booking_website_backend.entity.Photo;
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.photo.PhotoUpdateRequest;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

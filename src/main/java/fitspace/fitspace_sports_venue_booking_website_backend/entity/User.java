@@ -34,8 +34,6 @@ public class User {
 
     private String password;
 
-    private String avatar;
-
     private String role = "user";
 
     @Column(unique = true)
@@ -68,7 +66,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Review> reviews;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "customer")
     private List<Booking> bookings;
 
 }

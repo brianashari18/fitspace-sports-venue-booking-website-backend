@@ -1,10 +1,12 @@
 package fitspace.fitspace_sports_venue_booking_website_backend.service;
 
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.photo.PhotoDataResponse;
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.venue.VenueAddRequest;
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.venue.VenueDataResponse;
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.venue.VenueUpdateRequest;
 import fitspace.fitspace_sports_venue_booking_website_backend.entity.Photo;
 import fitspace.fitspace_sports_venue_booking_website_backend.entity.User;
 import fitspace.fitspace_sports_venue_booking_website_backend.entity.Venue;
-import fitspace.fitspace_sports_venue_booking_website_backend.model.*;
-import fitspace.fitspace_sports_venue_booking_website_backend.repository.PhotoRepository;
 import fitspace.fitspace_sports_venue_booking_website_backend.repository.VenueRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapperImpl;

@@ -1,7 +1,7 @@
 package fitspace.fitspace_sports_venue_booking_website_backend.controller;
 
-import fitspace.fitspace_sports_venue_booking_website_backend.model.TokenResponse;
-import fitspace.fitspace_sports_venue_booking_website_backend.model.WebResponse;
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.user.TokenResponse;
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.WebResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.service.GoogleAuthService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -32,6 +32,6 @@ public class Photo {
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     @ManyToOne
-    @JoinColumn(name = "venue_id", referencedColumnName = "id")
-    private Venue venue;
+    @JoinColumn(name = "field_id", referencedColumnName = "id")
+    private Field field;
 }

@@ -1,7 +1,8 @@
 package fitspace.fitspace_sports_venue_booking_website_backend.controller;
 
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.user.*;
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.WebResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.entity.User;
-import fitspace.fitspace_sports_venue_booking_website_backend.model.*;
 import fitspace.fitspace_sports_venue_booking_website_backend.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

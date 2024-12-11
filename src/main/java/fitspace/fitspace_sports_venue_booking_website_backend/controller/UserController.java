@@ -1,10 +1,10 @@
 package fitspace.fitspace_sports_venue_booking_website_backend.controller;
 
 import fitspace.fitspace_sports_venue_booking_website_backend.entity.User;
-import fitspace.fitspace_sports_venue_booking_website_backend.model.UserRegisterRequest;
-import fitspace.fitspace_sports_venue_booking_website_backend.model.UserDataResponse;
-import fitspace.fitspace_sports_venue_booking_website_backend.model.UserUpdateRequest;
-import fitspace.fitspace_sports_venue_booking_website_backend.model.WebResponse;
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.user.UserRegisterRequest;
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.user.UserDataResponse;
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.user.UserUpdateRequest;
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.WebResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

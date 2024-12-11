@@ -35,8 +35,6 @@ public class Venue {
 
     private String province;
 
-    private String country;
-
     @Column(name = "postal_code")
     private String postalCode;
 
@@ -45,9 +43,6 @@ public class Venue {
     private double longitude;
 
     private double rating = 0.0;
-
-    @Column(name = "reviews_count")
-    private int reviewsCount = 0;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -59,15 +54,6 @@ public class Venue {
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
     private User owner;
 
-    @OneToMany(mappedBy = "venue", cascade = CascadeType.PERSIST, orphanRemoval = true)
-    private List<Photo> gallery;
-
     @OneToMany(mappedBy = "venue")
     private List<Field> fields;
-
-    @OneToMany(mappedBy = "venue")
-    private List<Review> reviews;
-
-    @OneToMany(mappedBy = "venue")
-    private List<Booking> bookings;
 }

@@ -1,4 +1,4 @@
-package fitspace.fitspace_sports_venue_booking_website_backend.model;
+package fitspace.fitspace_sports_venue_booking_website_backend.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,6 +1,6 @@
 package fitspace.fitspace_sports_venue_booking_website_backend.controller;
 
-import fitspace.fitspace_sports_venue_booking_website_backend.model.WebResponse;
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.WebResponse;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,7 @@
-package fitspace.fitspace_sports_venue_booking_website_backend.model;
+package fitspace.fitspace_sports_venue_booking_website_backend.dto.venue;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import fitspace.fitspace_sports_venue_booking_website_backend.entity.Photo;
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.photo.PhotoAddRequest;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,10 +42,6 @@ public class VenueAddRequest {
     @NotBlank
     @Size(max = 100)
     private String province;
-
-    @NotBlank
-    @Size(max = 100)
-    private String country;
 
     @NotBlank
     @Size(max = 10)

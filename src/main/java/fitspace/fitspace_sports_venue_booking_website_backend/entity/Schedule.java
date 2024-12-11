@@ -26,8 +26,6 @@ public class Schedule {
     @Column(name = "time_slot")
     private String timeSlot;
 
-    private Long price;
-
     private String status = "available";
 
     @Column(name = "created_at")
@@ -39,4 +37,7 @@ public class Schedule {
     @ManyToOne
     @JoinColumn(name = "field_id", referencedColumnName = "id")
     private Field field;
+
+    @OneToOne(mappedBy = "schedule")
+    private Booking booking;
 }
