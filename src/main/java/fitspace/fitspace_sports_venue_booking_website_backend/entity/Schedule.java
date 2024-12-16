@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,17 +27,19 @@ public class Schedule {
     @Column(name = "time_slot")
     private String timeSlot;
 
-    private String status = "available";
-
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-    @ManyToOne
-    @JoinColumn(name = "field_id", referencedColumnName = "id")
-    private Field field;
+    @ManyToMany
+    @JoinTable(
+            name = "field_schedule",
+            joinColumns = @JoinColumn(name = "schedule_id"),
+            inverseJoinColumns = @JoinColumn(name = "field_id")
+    )
+    private List<Field> fields;
 
     @OneToOne(mappedBy = "schedule")
     private Booking booking;

@@ -32,8 +32,6 @@ public class VenueDataResponse {
 
     private String province;
 
-    private String country;
-
     @JsonProperty("postal_code")
     private String postalCode;
 

@@ -36,8 +36,16 @@ public class Field {
     private Venue venue;
 
     @OneToMany(mappedBy = "field")
-    private List<Photo> gallery;
+    private List<Review> reviews;
 
     @OneToMany(mappedBy = "field")
+    private List<Photo> gallery;
+
+    @ManyToMany
+    @JoinTable(
+            name = "field_schedule",
+            joinColumns = @JoinColumn(name = "field_id"),
+            inverseJoinColumns = @JoinColumn(name = "schedule_id")
+    )
     private List<Schedule> schedules;
 }

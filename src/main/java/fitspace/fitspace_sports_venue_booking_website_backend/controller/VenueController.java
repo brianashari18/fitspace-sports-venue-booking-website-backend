@@ -87,7 +87,7 @@ public class VenueController {
     }
 
     @GetMapping(
-            path = "/api/venues/public",
+            path = "/api/venues/owner",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public WebResponse<List<VenueDataResponse>> getAllFromOwner(User user) {

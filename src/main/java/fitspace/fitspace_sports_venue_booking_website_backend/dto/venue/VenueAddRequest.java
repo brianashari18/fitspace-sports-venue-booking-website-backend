@@ -58,6 +58,4 @@ public class VenueAddRequest {
     @DecimalMax(value = "180.0")
     private Double longitude;
 
-    @NotEmpty
-    private List<@NotNull PhotoAddRequest> photoAddRequests;
 }

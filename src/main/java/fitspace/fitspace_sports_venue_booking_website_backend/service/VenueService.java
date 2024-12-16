@@ -1,12 +1,15 @@
 package fitspace.fitspace_sports_venue_booking_website_backend.service;
 
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.field.FieldDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.photo.PhotoDataResponse;
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.schedule.ScheduleDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.venue.VenueAddRequest;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.venue.VenueDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.venue.VenueUpdateRequest;
 import fitspace.fitspace_sports_venue_booking_website_backend.entity.Photo;
 import fitspace.fitspace_sports_venue_booking_website_backend.entity.User;
 import fitspace.fitspace_sports_venue_booking_website_backend.entity.Venue;
+import fitspace.fitspace_sports_venue_booking_website_backend.helper.EntityToDtoMapper;
 import fitspace.fitspace_sports_venue_booking_website_backend.repository.VenueRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapperImpl;
@@ -29,32 +32,7 @@ public class VenueService {
     @Autowired
     private ValidationService validationService;
 
-    private VenueDataResponse toVenueDataResponse(Venue venue) {
-        return VenueDataResponse.builder()
-                .id(venue.getId())
-                .name(venue.getName())
-                .phoneNumber(venue.getPhoneNumber())
-                .street(venue.getStreet())
-                .district(venue.getDistrict())
-                .cityOrRegency(venue.getCityOrRegency())
-                .province(venue.getProvince())
-                .country(venue.getCountry())
-                .postalCode(venue.getPostalCode())
-                .latitude(venue.getLatitude())
-                .longitude(venue.getLongitude())
-                .rating(venue.getRating())
-                .reviewsCount(venue.getReviewsCount())
-                .ownerId(venue.getOwner().getId())
-                .gallery(venue.getGallery().stream().map(photo -> {
-                    return PhotoDataResponse.builder()
-                            .id(photo.getId())
-                            .photoUrl(photo.getPhotoUrl())
-                            .description(photo.getDescription())
-                            .venueId(photo.getVenue().getId())
-                            .build();
-                }).toList())
-                .build();
-    }
+    private final EntityToDtoMapper entityToDtoMapper = new EntityToDtoMapper();
 
     @Transactional
     public VenueDataResponse create(User user, VenueAddRequest request) {
@@ -67,25 +45,14 @@ public class VenueService {
         venue.setDistrict(request.getDistrict());
         venue.setCityOrRegency(request.getCityOrRegency());
         venue.setProvince(request.getProvince());
-        venue.setCountry(request.getCountry());
         venue.setPostalCode(request.getPostalCode());
         venue.setLatitude(request.getLatitude());
         venue.setLongitude(request.getLongitude());
         venue.setOwner(user);
 
-        List<Photo> gallery = request.getPhotoAddRequests().stream().map(photoAddRequest -> {
-            validationService.validate(photoAddRequest);
-            Photo photo = new Photo();
-            photo.setPhotoUrl(photoAddRequest.getPhotoUrl());
-            photo.setDescription(photoAddRequest.getDescription());
-            photo.setVenue(venue);
-            return photo;
-        }).toList();
-
-        venue.setGallery(gallery);
         venueRepository.save(venue);
 
-        return toVenueDataResponse(venue);
+        return entityToDtoMapper.toVenueDataResponse(venue);
     }
 
 
@@ -94,7 +61,8 @@ public class VenueService {
         Venue venue = venueRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Venue not found"));
 
-        return toVenueDataResponse(venue);
+        System.out.println(venue.getName());
+        return entityToDtoMapper.toVenueDataResponse(venue);
     }
 
     @Transactional
@@ -107,7 +75,7 @@ public class VenueService {
         BeanUtils.copyProperties(request, venue, getNullPropertyNames(request));
 
         venueRepository.save(venue);
-        return toVenueDataResponse(venue);
+        return entityToDtoMapper.toVenueDataResponse(venue);
     }
 
     private static String[] getNullPropertyNames(Object source) {
@@ -140,7 +108,7 @@ public class VenueService {
         }
 
         return venues.stream()
-                .map(this::toVenueDataResponse)
+                .map(entityToDtoMapper::toVenueDataResponse)
                 .toList();
     }
 
@@ -153,7 +121,7 @@ public class VenueService {
         }
 
         return venues.stream()
-                .map(this::toVenueDataResponse)
+                .map(entityToDtoMapper::toVenueDataResponse)
                 .toList();
     }
 }

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -55,5 +56,5 @@ public class Venue {
     private User owner;
 
     @OneToMany(mappedBy = "venue")
-    private List<Field> fields;
+    private List<Field> fields = new ArrayList<>();
 }

@@ -37,9 +37,6 @@ public class VenueUpdateRequest {
     @Size(max = 100)
     private String province;
 
-    @Size(max = 100)
-    private String country;
-
     @Size(max = 10)
     @JsonProperty("postal_code")
     private String postalCode;
@@ -52,5 +49,4 @@ public class VenueUpdateRequest {
     @DecimalMax(value = "180.0")
     private Double longitude;
 
-    private List<PhotoUpdateRequest> photoUpdateRequests;
 }
