@@ -6,8 +6,11 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     @Query("SELECT s FROM Schedule s WHERE s.date BETWEEN :startDate AND :endDate")
     List<Schedule> findSchedulesForWeek(LocalDate startDate, LocalDate endDate);
+
+    Optional<Schedule> findById(Integer id);
 }

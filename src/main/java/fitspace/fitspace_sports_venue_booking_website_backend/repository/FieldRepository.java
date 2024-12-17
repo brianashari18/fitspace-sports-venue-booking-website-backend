@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface FieldRepository extends JpaRepository<Field, Long> {
     Optional<Field> findFirstByIdAndVenue(Long id, Venue venue);
     List<Field> findAllByVenue(Venue venue);
+    Optional<Field> findById(Integer id);
 }
