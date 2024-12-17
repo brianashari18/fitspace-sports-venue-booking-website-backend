@@ -2,14 +2,13 @@ package fitspace.fitspace_sports_venue_booking_website_backend.service;
 
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.field.FieldAddRequest;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.field.FieldDataResponse;
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.field.FieldUpdateRequest;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.photo.PhotoDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.review.ReviewDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.schedule.ScheduleDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.entity.*;
 import fitspace.fitspace_sports_venue_booking_website_backend.helper.EntityToDtoMapper;
-import fitspace.fitspace_sports_venue_booking_website_backend.repository.FieldRepository;
-import fitspace.fitspace_sports_venue_booking_website_backend.repository.ScheduleRepository;
-import fitspace.fitspace_sports_venue_booking_website_backend.repository.VenueRepository;
+import fitspace.fitspace_sports_venue_booking_website_backend.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class FieldService {
@@ -35,7 +38,12 @@ public class FieldService {
     private VenueRepository venueRepository;
 
     @Autowired
+    private PhotoRepository photoRepository;
+
+    @Autowired
     private ValidationService validationService;
+    @Autowired
+    private FieldScheduleRepository fieldScheduleRepository;
 
     public void createScheduleIfNotExist() {
         LocalDate today = LocalDate.now();
@@ -124,5 +132,49 @@ public class FieldService {
         List<Field> fields = fieldRepository.findAllByVenue(venue);
         return fields.stream().map(EntityToDtoMapper::toFieldDataResponse).toList();
     }
+
+    public FieldDataResponse update(FieldUpdateRequest request, Long fieldId) {
+        Field field = fieldRepository.findById(fieldId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Field not found"));
+
+        List<FieldSchedule> existingFieldSchedules = field.getFieldSchedules();
+
+        if (request.getFieldSchedules() != null && !request.getFieldSchedules().isEmpty()) {
+            for (int i = 0; i < existingFieldSchedules.size(); i++) {
+                FieldSchedule fieldSchedule = existingFieldSchedules.get(i);
+                String newStatus = request.getFieldSchedules().get(i).getStatus();
+                if (newStatus != null) {
+                    fieldSchedule.setStatus(newStatus);
+                }
+            }
+            fieldScheduleRepository.saveAll(existingFieldSchedules);
+        }
+
+        if (request.getGallery() != null && !request.getGallery().isEmpty()) {
+            field.getGallery().clear(); // Clears the existing collection but keeps the same collection instance
+            request.getGallery().stream().map(photoUpdateRequest -> {
+                Photo photo = new Photo();
+                photo.setPhotoUrl(photoUpdateRequest.getPhotoUrl());
+                photo.setField(field);
+                return photo;
+            }).forEach(field.getGallery()::add);
+        }
+
+        if (request.getPrice() != null) {
+            field.setPrice(request.getPrice());
+        }
+
+        if (request.getType() != null) {
+            field.setType(request.getType());
+        }
+
+        fieldRepository.save(field);
+
+        return EntityToDtoMapper.toFieldDataResponse(field);
+    }
+
+
+
+
 
 }

@@ -26,8 +26,6 @@ public class ReviewService {
     @Autowired
     private FieldRepository fieldRepository;
 
-    private final EntityToDtoMapper entityToDtoMapper = new EntityToDtoMapper();
-
     @Transactional
     public ReviewDataResponse create(Integer fieldId, User user, ReviewAddRequest request) {
         Review review = new Review();
@@ -39,7 +37,7 @@ public class ReviewService {
         review.setRating(request.getRating());
         reviewRepository.save(review);
 
-        return entityToDtoMapper.toReviewDataResponse(review);
+        return fitspace.fitspace_sports_venue_booking_website_backend.helper.EntityToDtoMapper.toReviewDataResponse(review);
     }
 
     @Transactional(readOnly = true)
@@ -51,7 +49,7 @@ public class ReviewService {
         }
 
         return reviews.stream()
-                .map(entityToDtoMapper::toReviewDataResponse)
+                .map(fitspace.fitspace_sports_venue_booking_website_backend.helper.EntityToDtoMapper::toReviewDataResponse)
                 .toList();
     }
 

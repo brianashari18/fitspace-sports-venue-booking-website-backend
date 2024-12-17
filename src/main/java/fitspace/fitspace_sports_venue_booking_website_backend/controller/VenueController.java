@@ -34,7 +34,7 @@ public class VenueController {
             path = "/api/venues/{venueId}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public WebResponse<VenueDataResponse> get(@PathVariable("venueId") Integer venueId) {
+    public WebResponse<VenueDataResponse> get(@PathVariable("venueId") Long venueId) {
         VenueDataResponse venueDataResponse = venueService.get(venueId);
         return DtoToWebMapper.toWebResponse(venueDataResponse);
     }
@@ -44,7 +44,7 @@ public class VenueController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public WebResponse<VenueDataResponse> update(User user, @PathVariable("venueId") Integer venueId, @RequestBody VenueUpdateRequest request) {
+    public WebResponse<VenueDataResponse> update(User user, @PathVariable("venueId") Long venueId, @RequestBody VenueUpdateRequest request) {
         VenueDataResponse venueDataResponse = venueService.update(user, venueId, request);
         return DtoToWebMapper.toWebResponse(venueDataResponse);
     }
@@ -53,7 +53,7 @@ public class VenueController {
             path = "/api/venues/{venueId}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public WebResponse<String> delete(User user, @PathVariable("venueId") Integer venueId) {
+    public WebResponse<String> delete(User user, @PathVariable("venueId") Long venueId) {
         venueService.delete(user, venueId);
         return DtoToWebMapper.toWebResponse("Successfully deleted venue");
     }

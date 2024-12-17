@@ -3,6 +3,7 @@ package fitspace.fitspace_sports_venue_booking_website_backend.controller;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.WebResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.field.FieldAddRequest;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.field.FieldDataResponse;
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.field.FieldUpdateRequest;
 import fitspace.fitspace_sports_venue_booking_website_backend.entity.User;
 import fitspace.fitspace_sports_venue_booking_website_backend.helper.DtoToWebMapper;
 import fitspace.fitspace_sports_venue_booking_website_backend.service.FieldService;
@@ -46,5 +47,13 @@ public class FieldController {
     public WebResponse<List<FieldDataResponse>> get(User user, @PathVariable("venueId") Long venueId) {
         List<FieldDataResponse> fieldDataResponses = fieldService.getAll(venueId);
         return DtoToWebMapper.toWebResponse(fieldDataResponses);
+    }
+
+    @PatchMapping(
+            path = "/api/fields/{fieldId}"
+    )
+    public WebResponse<FieldDataResponse> update(User user, @RequestBody FieldUpdateRequest request, @PathVariable("fieldId") Long fieldId) {
+        FieldDataResponse fieldDataResponse = fieldService.update(request, fieldId);
+        return DtoToWebMapper.toWebResponse(fieldDataResponse);
     }
 }

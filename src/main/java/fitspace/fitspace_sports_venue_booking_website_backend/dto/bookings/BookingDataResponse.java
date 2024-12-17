@@ -15,9 +15,9 @@ public class BookingDataResponse {
     private String status;
 
     @JsonProperty("customer_id")
-    private int customerId;
+    private Long customerId;
 
     @JsonProperty("schedule_id")
-    private int scheduleId;
+    private Long scheduleId;
 
 }
