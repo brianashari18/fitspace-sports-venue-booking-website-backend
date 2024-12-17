@@ -3,6 +3,7 @@ package fitspace.fitspace_sports_venue_booking_website_backend.controller;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.WebResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.bookings.BookingAddRequest;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.bookings.BookingDataResponse;
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.bookings.BookingUpdateStatusRequest;
 import fitspace.fitspace_sports_venue_booking_website_backend.entity.User;
 import fitspace.fitspace_sports_venue_booking_website_backend.helper.DtoToWebMapper;
 import fitspace.fitspace_sports_venue_booking_website_backend.service.BookingService;
@@ -32,7 +33,7 @@ public class BookingController {
 
     @GetMapping(
             path = "/api/bookings",
-            consumes = MediaType.APPLICATION_JSON_VALUE
+            produces = MediaType.APPLICATION_JSON_VALUE
     )
     public WebResponse <List<BookingDataResponse>> get(User user) {
         List<BookingDataResponse> bookings = bookingService.get(user);
@@ -50,5 +51,15 @@ public class BookingController {
     public WebResponse<String> delete(User user, @PathVariable Long bookingId) {
         bookingService.delete(user, bookingId);
         return DtoToWebMapper.toWebResponse("Delete Booking Successfully");
+    }
+
+    @PatchMapping(
+            path = "/api/{bookingId}/bookings",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public WebResponse<BookingDataResponse> updateStatus(User user, @PathVariable Long bookingId, @RequestBody BookingUpdateStatusRequest request) {
+        BookingDataResponse bookingDataResponse = bookingService.updateStatus(user,bookingId,request);
+        return DtoToWebMapper.toWebResponse(bookingDataResponse);
     }
 }
