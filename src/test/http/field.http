@@ -20,13 +20,16 @@ Content-Type: application/json
 }
 
 ### Get field
-GET http://localhost:8080/api/venues/3/fields/2
-Authorization: fec375ff-353d-4145-821d-8c49eccf5ceb
+GET http://localhost:8080/api/venues/3/fields/5
+Authorization: 61603efa-31a1-485e-9652-5444df5b06b6
 
 ### Get field
 GET http://localhost:8080/api/venues/3/fields
-Authorization: fec375ff-353d-4145-821d-8c49eccf5ceb
+Authorization: 61603efa-31a1-485e-9652-5444df5b06b6
 
+### Delete field
+DELETE http://localhost:8080/api/venues/3/fields/5
+Authorization: 61603efa-31a1-485e-9652-5444df5b06b6
 
 ### Update field
 PATCH http://localhost:8080/api/fields/5

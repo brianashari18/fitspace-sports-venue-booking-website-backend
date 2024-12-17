@@ -173,7 +173,12 @@ public class FieldService {
         return EntityToDtoMapper.toFieldDataResponse(field);
     }
 
+    public void delete(Long venueId, Long fieldId) {
+        Venue venue = venueRepository.findById(venueId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Venue is not found"));
+        Field field = fieldRepository.findFirstByIdAndVenue(fieldId, venue).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Field is not found"));
 
+        fieldRepository.delete(field);
+    }
 
 
 
