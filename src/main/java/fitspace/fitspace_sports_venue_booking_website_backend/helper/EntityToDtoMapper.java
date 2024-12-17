@@ -34,10 +34,8 @@ public class EntityToDtoMapper {
                 .id(schedule.getId())
                 .date(schedule.getDate())
                 .timeSlot(schedule.getTimeSlot())
-                .status(schedule.getStatus())
                 .createdAt(schedule.getCreatedAt())
                 .updatedAt(schedule.getUpdatedAt())
-                .fieldId(schedule.getField().getId())
                 .bookingId(schedule.getBooking() != null ? schedule.getBooking().getId() : null)
                 .build();
     }
