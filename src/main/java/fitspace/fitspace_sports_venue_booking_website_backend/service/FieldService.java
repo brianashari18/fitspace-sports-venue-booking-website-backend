@@ -2,12 +2,14 @@ package fitspace.fitspace_sports_venue_booking_website_backend.service;
 
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.field.FieldAddRequest;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.field.FieldDataResponse;
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.field.FieldUpdateRequest;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.photo.PhotoDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.review.ReviewDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.schedule.ScheduleDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.entity.*;
 import fitspace.fitspace_sports_venue_booking_website_backend.helper.EntityToDtoMapper;
 import fitspace.fitspace_sports_venue_booking_website_backend.repository.FieldRepository;
+import fitspace.fitspace_sports_venue_booking_website_backend.repository.PhotoRepository;
 import fitspace.fitspace_sports_venue_booking_website_backend.repository.ScheduleRepository;
 import fitspace.fitspace_sports_venue_booking_website_backend.repository.VenueRepository;
 import org.slf4j.Logger;
@@ -36,6 +38,8 @@ public class FieldService {
 
     @Autowired
     private ValidationService validationService;
+    @Autowired
+    private PhotoRepository photoRepository;
 
     public void createScheduleIfNotExist() {
         LocalDate today = LocalDate.now();
@@ -123,6 +127,35 @@ public class FieldService {
         Venue venue = venueRepository.findById(venueId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Venue is not found"));
         List<Field> fields = fieldRepository.findAllByVenue(venue);
         return fields.stream().map(EntityToDtoMapper::toFieldDataResponse).toList();
+    }
+
+    public FieldDataResponse update(FieldUpdateRequest request, Long fieldId) {
+        Field field = fieldRepository.findById(fieldId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Field is not found"));
+        if(request.getType()!= null){
+            field.setType(request.getType());
+        }
+        if(request.getPrice() != null){
+            field.setPrice(request.getPrice());
+        }
+
+        if(request.getGallery() != null){
+
+            for(int i = 0 ; i < request.getGallery().size() ; i++){
+
+                if (photoRepository.findByPhotoUrl(request.getGallery().get(i).getPhotoUrl()).isEmpty()) {
+                    Photo photo = new Photo();
+                    photo.setPhotoUrl(request.getGallery().get(i).getPhotoUrl());
+                    photo.setField(field);
+                    photoRepository.save(photo);
+                }
+
+            }
+        }
+
+        fieldRepository.save(field);
+        return EntityToDtoMapper.toFieldDataResponse(field);
+
     }
 
 }
