@@ -15,12 +15,10 @@ import java.time.LocalDateTime;
 @Builder
 public class PhotoDataResponse {
 
-    private Integer id;
+    private Long id;
 
     @JsonProperty("photo_url")
     private String photoUrl;
-
-    private String description;
 
     @JsonProperty("created_at")
     private LocalDateTime createdAt;
@@ -29,6 +27,6 @@ public class PhotoDataResponse {
     private LocalDateTime updatedAt;
 
     @JsonProperty("field_id")
-    private Integer fieldId;
+    private Long fieldId;
 
 }

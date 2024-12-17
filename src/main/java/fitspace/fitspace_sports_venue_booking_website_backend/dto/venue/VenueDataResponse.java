@@ -16,7 +16,7 @@ import java.util.List;
 @Builder
 public class VenueDataResponse {
 
-    private Integer id;
+    private Long id;
 
     private String name;
 
@@ -45,7 +45,7 @@ public class VenueDataResponse {
     private Integer reviewsCount;
 
     @JsonProperty("owner_id")
-    private Integer ownerId;
+    private Long ownerId;
 
     private List<FieldDataResponse> fields;
 }

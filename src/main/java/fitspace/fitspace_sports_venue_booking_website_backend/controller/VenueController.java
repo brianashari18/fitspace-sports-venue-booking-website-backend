@@ -5,6 +5,7 @@ import fitspace.fitspace_sports_venue_booking_website_backend.dto.venue.VenueAdd
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.venue.VenueDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.venue.VenueUpdateRequest;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.WebResponse;
+import fitspace.fitspace_sports_venue_booking_website_backend.helper.DtoToWebMapper;
 import fitspace.fitspace_sports_venue_booking_website_backend.service.VenueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,11 +27,7 @@ public class VenueController {
     )
     public WebResponse<VenueDataResponse> create(User user, @RequestBody VenueAddRequest request) {
         VenueDataResponse venueDataResponse = venueService.create(user, request);
-        return WebResponse.<VenueDataResponse>builder()
-                .code(HttpStatus.OK.value())
-                .status(HttpStatus.OK.getReasonPhrase())
-                .data(venueDataResponse)
-                .build();
+        return DtoToWebMapper.toWebResponse(venueDataResponse);
     }
 
     @GetMapping(
@@ -39,11 +36,7 @@ public class VenueController {
     )
     public WebResponse<VenueDataResponse> get(@PathVariable("venueId") Integer venueId) {
         VenueDataResponse venueDataResponse = venueService.get(venueId);
-        return WebResponse.<VenueDataResponse>builder()
-                .code(HttpStatus.OK.value())
-                .status(HttpStatus.OK.getReasonPhrase())
-                .data(venueDataResponse)
-                .build();
+        return DtoToWebMapper.toWebResponse(venueDataResponse);
     }
 
     @PatchMapping(
@@ -53,11 +46,7 @@ public class VenueController {
     )
     public WebResponse<VenueDataResponse> update(User user, @PathVariable("venueId") Integer venueId, @RequestBody VenueUpdateRequest request) {
         VenueDataResponse venueDataResponse = venueService.update(user, venueId, request);
-        return WebResponse.<VenueDataResponse>builder()
-                .code(HttpStatus.OK.value())
-                .status(HttpStatus.OK.getReasonPhrase())
-                .data(venueDataResponse)
-                .build();
+        return DtoToWebMapper.toWebResponse(venueDataResponse);
     }
 
     @DeleteMapping(
@@ -66,11 +55,7 @@ public class VenueController {
     )
     public WebResponse<String> delete(User user, @PathVariable("venueId") Integer venueId) {
         venueService.delete(user, venueId);
-        return WebResponse.<String>builder()
-                .code(HttpStatus.OK.value())
-                .status(HttpStatus.OK.getReasonPhrase())
-                .data("Successfully deleted venue")
-                .build();
+        return DtoToWebMapper.toWebResponse("Successfully deleted venue");
     }
 
     @GetMapping(
@@ -79,11 +64,7 @@ public class VenueController {
     )
     public WebResponse<List<VenueDataResponse>> getAll() {
         List<VenueDataResponse> venueDataResponses = venueService.getAll();
-        return WebResponse.<List<VenueDataResponse>>builder()
-                .code(HttpStatus.OK.value())
-                .status(HttpStatus.OK.getReasonPhrase())
-                .data(venueDataResponses)
-                .build();
+        return DtoToWebMapper.toWebResponse(venueDataResponses);
     }
 
     @GetMapping(
@@ -92,10 +73,6 @@ public class VenueController {
     )
     public WebResponse<List<VenueDataResponse>> getAllFromOwner(User user) {
         List<VenueDataResponse> venueDataResponses = venueService.getAllFromOwner(user);
-        return WebResponse.<List<VenueDataResponse>>builder()
-                .code(HttpStatus.OK.value())
-                .status(HttpStatus.OK.getReasonPhrase())
-                .data(venueDataResponses)
-                .build();
+        return DtoToWebMapper.toWebResponse(venueDataResponses);
     }
 }

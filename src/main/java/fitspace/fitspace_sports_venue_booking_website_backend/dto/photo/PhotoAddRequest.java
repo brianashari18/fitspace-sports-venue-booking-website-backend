@@ -17,7 +17,4 @@ public class PhotoAddRequest {
     @JsonProperty("photo_url")
     private String photoUrl;
 
-    @NotBlank
-    private String description;
-
 }

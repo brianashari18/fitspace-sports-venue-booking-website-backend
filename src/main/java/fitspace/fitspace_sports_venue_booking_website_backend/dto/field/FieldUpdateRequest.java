@@ -1,6 +1,8 @@
 package fitspace.fitspace_sports_venue_booking_website_backend.dto.field;
 
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.fieldschedule.FieldScheduleUpdateRequest;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.photo.PhotoAddRequest;
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.photo.PhotoUpdateRequest;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -15,15 +17,14 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class FieldAddRequest {
+public class FieldUpdateRequest {
 
-    @NotNull
     private Long price;
 
-    @NotBlank
     private String type;
 
-    @NotEmpty
-    private List<PhotoAddRequest> gallery;
+    private List<PhotoUpdateRequest> gallery;
+
+    private List<FieldScheduleUpdateRequest> fieldSchedules;
 
 }

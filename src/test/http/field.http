@@ -1,0 +1,28 @@
+### Create field
+POST http://localhost:8080/api/venues/3/fields
+Authorization: ef3d0f01-d631-459b-a903-72589dd88603
+Content-Type: application/json
+
+{
+  "price": 100000,
+  "type": "Badminton",
+  "gallery": [
+    {
+      "photo_url": "https://example.com/photo1.jpg"
+    },
+    {
+      "photo_url": "https://example.com/photo2.jpg"
+    },
+    {
+      "photo_url": "https://example.com/photo3.jpg"
+    }
+  ]
+}
+
+### Get field
+GET http://localhost:8080/api/venues/3/fields/2
+Authorization: fec375ff-353d-4145-821d-8c49eccf5ceb
+
+### Get field
+GET http://localhost:8080/api/venues/3/fields
+Authorization: fec375ff-353d-4145-821d-8c49eccf5ceb

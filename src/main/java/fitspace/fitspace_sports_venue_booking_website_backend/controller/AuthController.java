@@ -3,6 +3,7 @@ package fitspace.fitspace_sports_venue_booking_website_backend.controller;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.user.*;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.WebResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.entity.User;
+import fitspace.fitspace_sports_venue_booking_website_backend.helper.DtoToWebMapper;
 import fitspace.fitspace_sports_venue_booking_website_backend.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,11 +23,7 @@ public class AuthController {
     )
     public WebResponse<TokenResponse> login(@RequestBody UserLoginRequest request) {
         TokenResponse tokenResponse = authService.login(request);
-        return WebResponse.<TokenResponse>builder()
-                .code(HttpStatus.OK.value())
-                .status(HttpStatus.OK.getReasonPhrase())
-                .data(tokenResponse)
-                .build();
+        return DtoToWebMapper.toWebResponse(tokenResponse);
     }
 
     @DeleteMapping(
@@ -36,11 +33,7 @@ public class AuthController {
     public WebResponse<String> logout(User user) {
         authService.logout(user);
 
-        return WebResponse.<String>builder()
-                .code(HttpStatus.OK.value())
-                .status(HttpStatus.OK.getReasonPhrase())
-                .data("Successfully logout")
-                .build();
+        return DtoToWebMapper.toWebResponse("Successfully logout");
     }
 
     @PostMapping(
@@ -50,11 +43,7 @@ public class AuthController {
     )
     public WebResponse<String> forgotPassword(@RequestBody UserForgotPasswordRequest request) {
         authService.forgotPassword(request);
-        return WebResponse.<String>builder()
-                .code(HttpStatus.OK.value())
-                .status(HttpStatus.OK.getReasonPhrase())
-                .data("OTP sent to your email")
-                .build();
+        return DtoToWebMapper.toWebResponse("OTP sent to your email");
     }
 
     @PostMapping(
@@ -64,11 +53,7 @@ public class AuthController {
     )
     public WebResponse<TokenResponse> validateOtp(@RequestBody UserValidateOtpRequest request) {
         TokenResponse tokenResponse = authService.validateOtp(request);
-        return WebResponse.<TokenResponse>builder()
-                .code(HttpStatus.OK.value())
-                .status(HttpStatus.OK.getReasonPhrase())
-                .data(tokenResponse)
-                .build();
+        return DtoToWebMapper.toWebResponse(tokenResponse);
     }
 
     @PatchMapping(
@@ -78,11 +63,7 @@ public class AuthController {
     )
     public WebResponse<String> resetPassword(@RequestBody UserResetPasswordRequest request, User user) {
         authService.resetPassword(request, user);
-        return WebResponse.<String>builder()
-                .code(HttpStatus.OK.value())
-                .status(HttpStatus.OK.getReasonPhrase())
-                .data("Password has been reset successfully")
-                .build();
+        return DtoToWebMapper.toWebResponse("Password has been reset successfully");
     }
 
 }

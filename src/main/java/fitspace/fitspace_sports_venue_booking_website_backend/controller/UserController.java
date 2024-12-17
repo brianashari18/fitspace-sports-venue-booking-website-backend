@@ -5,6 +5,7 @@ import fitspace.fitspace_sports_venue_booking_website_backend.dto.user.UserRegis
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.user.UserDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.user.UserUpdateRequest;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.WebResponse;
+import fitspace.fitspace_sports_venue_booking_website_backend.helper.DtoToWebMapper;
 import fitspace.fitspace_sports_venue_booking_website_backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,10 +25,7 @@ public class UserController {
     )
     public WebResponse<UserDataResponse> register(@RequestBody UserRegisterRequest request) {
         UserDataResponse userDataResponse = userService.register(request);
-        return WebResponse.<UserDataResponse>builder()
-                .data(userDataResponse)
-                .code(200).status("OK")
-                .build();
+        return DtoToWebMapper.toWebResponse(userDataResponse);
     }
 
     @GetMapping(
@@ -36,11 +34,7 @@ public class UserController {
     )
     public WebResponse<UserDataResponse> get(User user) {
         UserDataResponse userDataResponse = userService.get(user);
-        return WebResponse.<UserDataResponse>builder()
-                .code(HttpStatus.OK.value())
-                .status(HttpStatus.OK.getReasonPhrase())
-                .data(userDataResponse)
-                .build();
+        return DtoToWebMapper.toWebResponse(userDataResponse);
     }
 
     @PatchMapping(
@@ -50,10 +44,6 @@ public class UserController {
     )
     public WebResponse<UserDataResponse> update(User user, @RequestBody UserUpdateRequest request) {
         UserDataResponse userDataResponse = userService.update(user, request);
-        return WebResponse.<UserDataResponse>builder()
-                .code(HttpStatus.OK.value())
-                .status(HttpStatus.OK.getReasonPhrase())
-                .data(userDataResponse)
-                .build();
+        return DtoToWebMapper.toWebResponse(userDataResponse);
     }
 }

@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @Builder
 public class ReviewDataResponse {
 
-    private Integer id;
+    private Long id;
 
     private Integer rating;
 
@@ -32,9 +32,9 @@ public class ReviewDataResponse {
     private LocalDateTime updatedAt;
 
     @JsonProperty("field_id")
-    private Integer fieldId;
+    private Long fieldId;
 
     @JsonProperty("user_id")
-    private Integer userId;
+    private Long userId;
 
 }

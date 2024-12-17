@@ -21,25 +21,17 @@ import java.time.LocalDateTime;
 @Builder
 public class ScheduleDataResponse {
 
-    private Integer id;
+    private Long id;
 
     private LocalDate date;
 
     @JsonProperty("time_slot")
     private String timeSlot;
 
-    private String status = "available";
-
     @JsonProperty("created_at")
     private LocalDateTime createdAt;
 
     @JsonProperty("updated_at")
     private LocalDateTime updatedAt;
-
-    @JsonProperty("field_id")
-    private Integer fieldId;
-
-    @JsonProperty("booking_id")
-    private Integer bookingId;
 
 }

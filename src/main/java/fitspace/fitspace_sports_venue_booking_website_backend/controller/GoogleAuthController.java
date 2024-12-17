@@ -2,6 +2,7 @@ package fitspace.fitspace_sports_venue_booking_website_backend.controller;
 
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.user.TokenResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.WebResponse;
+import fitspace.fitspace_sports_venue_booking_website_backend.helper.DtoToWebMapper;
 import fitspace.fitspace_sports_venue_booking_website_backend.service.GoogleAuthService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +33,6 @@ public class GoogleAuthController {
         String accessToken = googleAuthService.getAccessToken(code);
         Map<String, Object> profile = googleAuthService.getUserProfile(accessToken);
         TokenResponse tokenResponse = googleAuthService.findOrCreateUser(profile);
-        return WebResponse.<TokenResponse>builder()
-                .code(HttpStatus.OK.value())
-                .status(HttpStatus.OK.getReasonPhrase())
-                .data(tokenResponse)
-                .build();
+        return DtoToWebMapper.toWebResponse(tokenResponse);
     }
 }

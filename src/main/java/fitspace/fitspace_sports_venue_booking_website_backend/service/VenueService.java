@@ -32,8 +32,6 @@ public class VenueService {
     @Autowired
     private ValidationService validationService;
 
-    private final EntityToDtoMapper entityToDtoMapper = new EntityToDtoMapper();
-
     @Transactional
     public VenueDataResponse create(User user, VenueAddRequest request) {
         validationService.validate(request);
@@ -52,21 +50,21 @@ public class VenueService {
 
         venueRepository.save(venue);
 
-        return entityToDtoMapper.toVenueDataResponse(venue);
+        return EntityToDtoMapper.toVenueDataResponse(venue);
     }
 
 
     @Transactional(readOnly = true)
-    public VenueDataResponse get(Integer id) {
+    public VenueDataResponse get(Long id) {
         Venue venue = venueRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Venue not found"));
 
         System.out.println(venue.getName());
-        return entityToDtoMapper.toVenueDataResponse(venue);
+        return EntityToDtoMapper.toVenueDataResponse(venue);
     }
 
     @Transactional
-    public VenueDataResponse update(User user, Integer id, VenueUpdateRequest request) {
+    public VenueDataResponse update(User user, Long id, VenueUpdateRequest request) {
         validationService.validate(request);
 
         Venue venue = venueRepository.findFirstByOwnerAndId(user, id)
@@ -75,7 +73,7 @@ public class VenueService {
         BeanUtils.copyProperties(request, venue, getNullPropertyNames(request));
 
         venueRepository.save(venue);
-        return entityToDtoMapper.toVenueDataResponse(venue);
+        return EntityToDtoMapper.toVenueDataResponse(venue);
     }
 
     private static String[] getNullPropertyNames(Object source) {
@@ -92,7 +90,7 @@ public class VenueService {
 
 
     @Transactional
-    public void delete(User user, Integer id) {
+    public void delete(User user, Long id) {
         Venue venue = venueRepository.findFirstByOwnerAndId(user, id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Venue not found"));
 
@@ -108,7 +106,7 @@ public class VenueService {
         }
 
         return venues.stream()
-                .map(entityToDtoMapper::toVenueDataResponse)
+                .map(EntityToDtoMapper::toVenueDataResponse)
                 .toList();
     }
 
@@ -121,7 +119,7 @@ public class VenueService {
         }
 
         return venues.stream()
-                .map(entityToDtoMapper::toVenueDataResponse)
+                .map(EntityToDtoMapper::toVenueDataResponse)
                 .toList();
     }
 }

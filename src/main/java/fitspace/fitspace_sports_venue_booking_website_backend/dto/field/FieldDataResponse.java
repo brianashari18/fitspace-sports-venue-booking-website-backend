@@ -1,15 +1,10 @@
 package fitspace.fitspace_sports_venue_booking_website_backend.dto.field;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.fieldschedule.FieldScheduleDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.photo.PhotoDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.review.ReviewDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.schedule.ScheduleDataResponse;
-import fitspace.fitspace_sports_venue_booking_website_backend.entity.Schedule;
-import fitspace.fitspace_sports_venue_booking_website_backend.entity.Venue;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +19,7 @@ import java.util.List;
 @Builder
 public class FieldDataResponse {
 
-    private Integer id;
+    private Long id;
 
     private Long price;
 
@@ -37,12 +32,12 @@ public class FieldDataResponse {
     private LocalDateTime updatedAt;
 
     @JsonProperty("venue_id")
-    private Integer venueId;
+    private Long venueId;
 
     private List<ReviewDataResponse> reviews;
 
     private List<PhotoDataResponse> gallery;
 
-    private List<ScheduleDataResponse> schedules;
+    private List<FieldScheduleDataResponse> fieldSchedules;
 
 }

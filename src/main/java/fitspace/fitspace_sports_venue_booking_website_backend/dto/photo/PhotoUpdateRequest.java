@@ -15,6 +15,4 @@ public class PhotoUpdateRequest {
     @JsonProperty("photo_url")
     private String photoUrl;
 
-    private String description;
-
 }

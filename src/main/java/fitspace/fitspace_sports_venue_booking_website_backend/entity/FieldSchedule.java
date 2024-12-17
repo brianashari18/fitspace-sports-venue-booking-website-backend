@@ -6,32 +6,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "gallery")
-public class Photo {
+@Table(name = "field_schedule")
+public class FieldSchedule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "photo_url")
-    private String photoUrl;
-
-    private String description;
-
-    @Column(name = "created_at")
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    @Column(name = "status")
+    private String status = "available";
 
     @ManyToOne
     @JoinColumn(name = "field_id", referencedColumnName = "id")
     private Field field;
+
+    @ManyToOne
+    @JoinColumn(name = "schedule_id", referencedColumnName = "id")
+    private Schedule schedule;
 }

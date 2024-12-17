@@ -19,7 +19,7 @@ public class Field {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private Long price;
 
@@ -38,14 +38,10 @@ public class Field {
     @OneToMany(mappedBy = "field")
     private List<Review> reviews;
 
-    @OneToMany(mappedBy = "field")
+    @OneToMany(mappedBy = "field", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Photo> gallery;
 
-    @ManyToMany
-    @JoinTable(
-            name = "field_schedule",
-            joinColumns = @JoinColumn(name = "field_id"),
-            inverseJoinColumns = @JoinColumn(name = "schedule_id")
-    )
-    private List<Schedule> schedules;
+    @OneToMany(mappedBy = "field", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<FieldSchedule> fieldSchedules;
+
 }

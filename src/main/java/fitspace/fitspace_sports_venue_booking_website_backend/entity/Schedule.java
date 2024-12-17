@@ -20,7 +20,7 @@ public class Schedule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private LocalDate date;
 
@@ -33,13 +33,8 @@ public class Schedule {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-    @ManyToMany
-    @JoinTable(
-            name = "field_schedule",
-            joinColumns = @JoinColumn(name = "schedule_id"),
-            inverseJoinColumns = @JoinColumn(name = "field_id")
-    )
-    private List<Field> fields;
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<FieldSchedule> fieldSchedules;
 
     @OneToOne(mappedBy = "schedule")
     private Booking booking;

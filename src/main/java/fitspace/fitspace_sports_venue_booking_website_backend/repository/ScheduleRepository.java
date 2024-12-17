@@ -1,0 +1,13 @@
+package fitspace.fitspace_sports_venue_booking_website_backend.repository;
+
+import fitspace.fitspace_sports_venue_booking_website_backend.entity.Schedule;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import java.time.LocalDate;
+import java.util.List;
+
+public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
+    @Query("SELECT s FROM Schedule s WHERE s.date BETWEEN :startDate AND :endDate")
+    List<Schedule> findSchedulesForWeek(LocalDate startDate, LocalDate endDate);
+}
