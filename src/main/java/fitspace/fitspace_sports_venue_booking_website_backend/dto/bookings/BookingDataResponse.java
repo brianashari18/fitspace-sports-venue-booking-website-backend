@@ -12,12 +12,14 @@ import lombok.NoArgsConstructor;
 @Builder
 public class BookingDataResponse {
 
+    private Long id;
+
     private String status;
 
     @JsonProperty("customer_id")
-    private int customerId;
+    private long customerId;
 
     @JsonProperty("schedule_id")
-    private int scheduleId;
+    private long scheduleId;
 
 }

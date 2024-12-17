@@ -13,4 +13,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     List<Schedule> findSchedulesForWeek(LocalDate startDate, LocalDate endDate);
 
     Optional<Schedule> findById(Integer id);
+
+    Optional<Schedule> findByDateAndTimeSlot(LocalDate date, String timeSlot);
 }
