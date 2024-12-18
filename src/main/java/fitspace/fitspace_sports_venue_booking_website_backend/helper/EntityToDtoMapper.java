@@ -1,5 +1,6 @@
 package fitspace.fitspace_sports_venue_booking_website_backend.helper;
 
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.bookings.BookingDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.field.FieldDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.fieldschedule.FieldScheduleDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.photo.PhotoDataResponse;
@@ -83,6 +84,15 @@ public class EntityToDtoMapper {
                 .rating(venue.getRating())
                 .ownerId(venue.getOwner().getId())
                 .fields(venue.getFields().stream().map(EntityToDtoMapper::toFieldDataResponse).collect(Collectors.toList()))
+                .build();
+    }
+
+    public static BookingDataResponse toBookingDataResponse(Booking booking) {
+        return BookingDataResponse.builder()
+                .id(booking.getId())
+                .customerId(booking.getCustomer().getId())
+                .scheduleId(booking.getSchedule().getId())
+                .status(booking.getStatus())
                 .build();
     }
 }

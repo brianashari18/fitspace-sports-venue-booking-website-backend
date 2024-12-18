@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface FieldScheduleRepository extends JpaRepository<FieldSchedule, Long> {
@@ -15,4 +16,5 @@ public interface FieldScheduleRepository extends JpaRepository<FieldSchedule, Lo
     List<FieldSchedule> findAllByField(Field field);
     FieldSchedule findFirstByField(Field field);
 
+    Optional<FieldSchedule> findByFieldAndSchedule(Field field, Schedule schedule);
 }

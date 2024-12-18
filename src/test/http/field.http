@@ -1,6 +1,6 @@
 ### Create field
 POST http://localhost:8080/api/venues/3/fields
-Authorization: ad50488c-6fe2-4928-9dde-09bf83e2b603
+Authorization: 61603efa-31a1-485e-9652-5444df5b06b6
 Content-Type: application/json
 
 {
