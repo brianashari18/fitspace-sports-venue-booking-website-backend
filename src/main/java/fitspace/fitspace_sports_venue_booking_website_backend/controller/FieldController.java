@@ -50,12 +50,19 @@ public class FieldController {
     }
 
     @PatchMapping(
-            path = "/api/venues/fields/{fieldId}",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE
+            path = "/api/fields/{fieldId}"
     )
-    public WebResponse<FieldDataResponse> update(@RequestBody FieldUpdateRequest request, @PathVariable("fieldId") Long fieldId) {
+    public WebResponse<FieldDataResponse> update(User user, @RequestBody FieldUpdateRequest request, @PathVariable("fieldId") Long fieldId) {
         FieldDataResponse fieldDataResponse = fieldService.update(request, fieldId);
         return DtoToWebMapper.toWebResponse(fieldDataResponse);
+    }
+
+    @DeleteMapping(
+            path = "/api/venues/{venueId}/fields/{fieldId}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public WebResponse<String> delete(User user, @PathVariable("venueId") Long venueId, @PathVariable("fieldId") Long fieldId) {
+        fieldService.delete(venueId, fieldId);
+        return DtoToWebMapper.toWebResponse("Successfully deleted field");
     }
 }

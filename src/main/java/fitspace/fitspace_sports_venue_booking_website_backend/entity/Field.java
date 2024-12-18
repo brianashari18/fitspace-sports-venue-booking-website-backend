@@ -38,10 +38,11 @@ public class Field {
     @OneToMany(mappedBy = "field")
     private List<Review> reviews;
 
-    @OneToMany(mappedBy = "field", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(mappedBy = "field", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Photo> gallery;
 
-    @OneToMany(mappedBy = "field", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(mappedBy = "field", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FieldSchedule> fieldSchedules;
+
 
 }
