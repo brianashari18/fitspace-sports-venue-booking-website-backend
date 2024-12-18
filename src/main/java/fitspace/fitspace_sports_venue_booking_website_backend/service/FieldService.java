@@ -153,6 +153,8 @@ public class FieldService {
             }
         }
 
+
+
         fieldRepository.save(field);
         return EntityToDtoMapper.toFieldDataResponse(field);
 
