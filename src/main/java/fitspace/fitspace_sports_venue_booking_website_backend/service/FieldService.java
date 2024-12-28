@@ -168,6 +168,8 @@ public class FieldService {
             field.setType(request.getType());
         }
 
+
+
         fieldRepository.save(field);
 
         return EntityToDtoMapper.toFieldDataResponse(field);
