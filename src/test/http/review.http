@@ -1,0 +1,10 @@
+### Post review
+POST http://localhost:8080/api/fields/4/reviews
+Content-Type: application/json
+Authorization: 6e2c539c-cae9-459a-88ce-62c9e657cd49
+
+{
+  "rating": 5,
+  "comment": "Test",
+  "url": "https://example.com"
+}

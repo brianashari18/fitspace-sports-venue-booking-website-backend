@@ -8,6 +8,8 @@ import fitspace.fitspace_sports_venue_booking_website_backend.entity.User;
 import fitspace.fitspace_sports_venue_booking_website_backend.helper.EntityToDtoMapper;
 import fitspace.fitspace_sports_venue_booking_website_backend.repository.FieldRepository;
 import fitspace.fitspace_sports_venue_booking_website_backend.repository.ReviewRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,10 @@ import java.util.Optional;
 @Service
 public class ReviewService {
 
+    private static final Logger log = LoggerFactory.getLogger(ReviewService.class);
+    @Autowired
+    private ValidationService validationService;
+
     @Autowired
     private ReviewRepository reviewRepository;
 
@@ -29,6 +35,8 @@ public class ReviewService {
 
     @Transactional
     public ReviewDataResponse create(Integer fieldId, User user, ReviewAddRequest request) {
+        validationService.validate(request);
+
         Review review = new Review();
         Field field = fieldRepository.findById(fieldId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Field not found"));;
@@ -36,7 +44,17 @@ public class ReviewService {
         review.setField(field);
         review.setUser(user);
         review.setRating(request.getRating());
-        reviewRepository.save(review);
+
+        try {
+            reviewRepository.save(review);
+            log.info("Review saved for field ID {} by user ID {}", review.getField().getId(), review.getUser().getId());
+
+        } catch (Exception e) {
+            log.error("Failed to save review: {}", e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error saving review");
+        }
+
+        log.info("TEST: field ID {} by user ID {}", review.getField().getId(), review.getUser().getId());
 
         return EntityToDtoMapper.toReviewDataResponse(review);
     }

@@ -8,11 +8,15 @@ import fitspace.fitspace_sports_venue_booking_website_backend.dto.review.ReviewD
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.schedule.ScheduleDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.venue.VenueDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.entity.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class EntityToDtoMapper {
+
+    private static final Logger log = LoggerFactory.getLogger(EntityToDtoMapper.class);
 
     public static FieldDataResponse toFieldDataResponse(Field field) {
         return FieldDataResponse.builder()
@@ -48,6 +52,7 @@ public class EntityToDtoMapper {
     }
 
     public static ReviewDataResponse toReviewDataResponse(Review review) {
+        log.info(review.getComment());
         return ReviewDataResponse.builder()
                 .id(review.getId())
                 .rating(review.getRating())

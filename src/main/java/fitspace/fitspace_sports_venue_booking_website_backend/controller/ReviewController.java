@@ -21,7 +21,7 @@ public class ReviewController {
     private ReviewService reviewService;
 
     @PostMapping(
-            path = "/api/{fieldId}/reviews",
+            path = "/api/fields/{fieldId}/reviews",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )

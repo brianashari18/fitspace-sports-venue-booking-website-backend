@@ -1,6 +1,7 @@
 package fitspace.fitspace_sports_venue_booking_website_backend.dto.review;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,10 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
 public class ReviewAddRequest {
 
-    @NotBlank
+    @NotNull
     private Integer rating;
 
     @NotBlank
