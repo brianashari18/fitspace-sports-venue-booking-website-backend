@@ -26,13 +26,15 @@ public class GoogleAuthController {
     public void initiateGoogleLogin(HttpServletResponse response) throws IOException {
         String authUrl = googleAuthService.generateAuthUrl();
         response.sendRedirect(authUrl);
+        
     }
 
     @GetMapping("/callback")
-    public WebResponse<TokenResponse> handleGoogleCallback(@RequestParam("code") String code) {
+    public WebResponse<TokenResponse> handleGoogleCallback(HttpServletResponse response, @RequestParam("code") String code) throws IOException {
         String accessToken = googleAuthService.getAccessToken(code);
         Map<String, Object> profile = googleAuthService.getUserProfile(accessToken);
         TokenResponse tokenResponse = googleAuthService.findOrCreateUser(profile);
+        response.sendRedirect("http://localhost:5173/");
         return DtoToWebMapper.toWebResponse(tokenResponse);
     }
 }
