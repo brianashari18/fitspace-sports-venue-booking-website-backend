@@ -5,10 +5,15 @@ import fitspace.fitspace_sports_venue_booking_website_backend.entity.User;
 import fitspace.fitspace_sports_venue_booking_website_backend.helper.EnvHelper;
 import fitspace.fitspace_sports_venue_booking_website_backend.repository.UserRepository;
 import fitspace.fitspace_sports_venue_booking_website_backend.security.BCrypt;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
@@ -16,6 +21,8 @@ import java.util.UUID;
 
 @Service
 public class AuthService {
+
+    private static final Logger log = LoggerFactory.getLogger(AuthService.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -40,13 +47,6 @@ public class AuthService {
         } else {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email or password wrong");
         }
-    }
-
-    @Transactional
-    public void logout(User user) {
-        user.setToken(null);
-        user.setTokenExpiredAt(null);
-        userRepository.save(user);
     }
 
     public void forgotPassword(UserForgotPasswordRequest request) {
@@ -108,4 +108,64 @@ public class AuthService {
                 .expiredAt(user.getTokenExpiredAt())
                 .build();
     }
+
+    public void logout(String accessToken) {
+        if (accessToken == null || accessToken.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Access token is required for logout");
+        }
+
+        if (isGoogleToken(accessToken)) {
+            revokeGoogleToken(accessToken);
+        } else {
+            revokeManualToken(accessToken);
+        }
+    }
+
+    private boolean isGoogleToken(String accessToken) {
+        return accessToken.startsWith("ya29.");
+    }
+
+    private void revokeGoogleToken(String accessToken) {
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            String revokeUrl = "https://oauth2.googleapis.com/revoke";
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+            MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+            body.add("token", accessToken);
+
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
+
+            ResponseEntity<String> response = restTemplate.postForEntity(revokeUrl, request, String.class);
+
+            log.info("Access Token: {}", accessToken);
+
+            User user = userRepository.findFirstByToken(accessToken)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+            log.info("User: {}", user.getEmail());
+
+            user.setToken(null);
+            user.setTokenExpiredAt(null);
+            userRepository.save(user);
+            if (response.getStatusCode() != HttpStatus.OK) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Failed to revoke Google token");
+            }
+        } catch (Exception e) {
+            log.error("Error during Google logout: {}", e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error during Google logout", e);
+        }
+    }
+
+    private void revokeManualToken(String accessToken) {
+        User user = userRepository.findFirstByToken(accessToken)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        user.setToken(null);
+        user.setTokenExpiredAt(null);
+        userRepository.save(user);
+    }
+
 }

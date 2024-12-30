@@ -4,6 +4,7 @@ import fitspace.fitspace_sports_venue_booking_website_backend.entity.User;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.user.UserRegisterRequest;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.user.UserDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.user.UserUpdateRequest;
+import fitspace.fitspace_sports_venue_booking_website_backend.helper.EntityToDtoMapper;
 import fitspace.fitspace_sports_venue_booking_website_backend.repository.UserRepository;
 import fitspace.fitspace_sports_venue_booking_website_backend.security.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,19 +40,11 @@ public class UserService {
 
         userRepository.save(user);
 
-        return UserDataResponse.builder()
-                .email(user.getEmail())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .build();
+        return EntityToDtoMapper.toUserDataResponse(user);
     }
 
     public UserDataResponse get(User user) {
-        return UserDataResponse.builder()
-                .email(user.getEmail())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .build();
+        return EntityToDtoMapper.toUserDataResponse(user);
     }
 
     @Transactional
@@ -68,11 +61,7 @@ public class UserService {
 
         userRepository.save(user);
 
-        return UserDataResponse.builder()
-                .email(user.getEmail())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .build();
+        return EntityToDtoMapper.toUserDataResponse(user);
     }
 
 

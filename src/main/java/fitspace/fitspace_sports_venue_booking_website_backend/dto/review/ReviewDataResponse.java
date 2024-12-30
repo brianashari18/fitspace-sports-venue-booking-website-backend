@@ -1,6 +1,7 @@
 package fitspace.fitspace_sports_venue_booking_website_backend.dto.review;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.user.UserDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.entity.Field;
 import fitspace.fitspace_sports_venue_booking_website_backend.entity.User;
 import jakarta.persistence.Column;
@@ -34,7 +35,5 @@ public class ReviewDataResponse {
     @JsonProperty("field_id")
     private Long fieldId;
 
-    @JsonProperty("user_id")
-    private Long userId;
-
+    private UserDataResponse user;
 }

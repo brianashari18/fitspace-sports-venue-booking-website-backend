@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class UserDataResponse {
+    private Long id;
+
     private String email;
 
     @JsonProperty("first_name")

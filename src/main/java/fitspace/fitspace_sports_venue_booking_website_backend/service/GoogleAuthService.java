@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDateTime;
@@ -62,7 +63,7 @@ public class GoogleAuthService {
 
             return (String) response.getBody().get("access_token");
         } catch (Exception e) {
-            throw new RuntimeException("Failed to get access token from Google", e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Failed to get access token from Google", e);
         }
     }
 
@@ -80,14 +81,14 @@ public class GoogleAuthService {
         return response.getBody();
     }
 
-    public TokenResponse findOrCreateUser(Map<String, Object> profile) {
+    public TokenResponse findOrCreateUser(Map<String, Object> profile, String accessToken) {
         if (profile == null || profile.isEmpty()) {
-            throw new IllegalArgumentException("Profile data cannot be null or empty");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Profile data cannot be null or empty");
         }
 
         String email = (String) profile.get("email");
         if (email == null || email.isEmpty()) {
-            throw new IllegalArgumentException("Email is required");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email is required");
         }
 
         String firstName = (String) profile.get("given_name");
@@ -96,7 +97,7 @@ public class GoogleAuthService {
         User user = userRepository.findFirstByEmail(email)
                 .orElseGet(() -> createNewUser(email, firstName, lastName));
 
-        user.setToken(UUID.randomUUID().toString());
+        user.setToken(accessToken);
         user.setTokenExpiredAt(LocalDateTime.now().plusHours(5));
         userRepository.save(user);
 
@@ -111,8 +112,7 @@ public class GoogleAuthService {
         user.setEmail(email);
         user.setFirstName(firstName != null ? firstName : "");
         user.setLastName(lastName != null ? lastName : "");
-        user.setPassword(UUID.randomUUID().toString()); // Generate password default
+        user.setPassword(UUID.randomUUID().toString());
         return user;
     }
-
 }

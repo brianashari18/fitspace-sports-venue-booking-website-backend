@@ -21,7 +21,7 @@ Content-Type: application/json
 
 ### Get User
 GET http://localhost:8080/api/users/current
-Authorization: b9ceb420-6e80-4def-84b4-cb2263a51ca9
+Authorization: fb3d24a0-3e01-422f-976b-1f95eaffd141
 
 ### Update User
 PATCH http://localhost:8080/api/users/current

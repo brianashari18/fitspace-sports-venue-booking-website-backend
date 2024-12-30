@@ -1,6 +1,6 @@
 ### Create Venue
 POST http://localhost:8080/api/venues
-Authorization: ef3d0f01-d631-459b-a903-72589dd88603
+Authorization: fb3d24a0-3e01-422f-976b-1f95eaffd141
 Content-Type: application/json
 
 {

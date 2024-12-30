@@ -6,6 +6,7 @@ import fitspace.fitspace_sports_venue_booking_website_backend.dto.fieldschedule.
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.photo.PhotoDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.review.ReviewDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.schedule.ScheduleDataResponse;
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.user.UserDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.venue.VenueDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.entity.*;
 import org.slf4j.Logger;
@@ -17,6 +18,15 @@ import java.util.stream.Collectors;
 public class EntityToDtoMapper {
 
     private static final Logger log = LoggerFactory.getLogger(EntityToDtoMapper.class);
+
+    public static UserDataResponse toUserDataResponse(User user) {
+        return UserDataResponse.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .build();
+    }
 
     public static FieldDataResponse toFieldDataResponse(Field field) {
         return FieldDataResponse.builder()
@@ -60,7 +70,12 @@ public class EntityToDtoMapper {
                 .createdAt(review.getCreatedAt())
                 .updatedAt(review.getUpdatedAt())
                 .fieldId(review.getField().getId())
-                .userId(review.getUser().getId())
+                .user(UserDataResponse.builder()
+                        .id(review.getUser().getId())
+                        .email(review.getUser().getEmail())
+                        .firstName(review.getUser().getFirstName())
+                        .lastName(review.getUser().getLastName())
+                        .build())
                 .build();
     }
 

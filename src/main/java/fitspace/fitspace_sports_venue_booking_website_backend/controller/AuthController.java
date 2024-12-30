@@ -25,16 +25,16 @@ public class AuthController {
         TokenResponse tokenResponse = authService.login(request);
         return DtoToWebMapper.toWebResponse(tokenResponse);
     }
-
-    @DeleteMapping(
-            path = "/api/auth/logout",
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public WebResponse<String> logout(User user) {
-        authService.logout(user);
-
-        return DtoToWebMapper.toWebResponse("Successfully logout");
-    }
+//
+//    @DeleteMapping(
+//            path = "/api/auth/logout",
+//            produces = MediaType.APPLICATION_JSON_VALUE
+//    )
+//    public WebResponse<String> logout(User user) {
+//        authService.logout(user);
+//
+//        return DtoToWebMapper.toWebResponse("Successfully logout");
+//    }
 
     @PostMapping(
             path = "/api/auth/forgot-password",
@@ -61,9 +61,15 @@ public class AuthController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
+
     public WebResponse<String> resetPassword(@RequestBody UserResetPasswordRequest request, User user) {
         authService.resetPassword(request, user);
         return DtoToWebMapper.toWebResponse("Password has been reset successfully");
     }
 
+    @DeleteMapping(value = "/api/auth/logout", produces = MediaType.APPLICATION_JSON_VALUE)
+    public WebResponse<String> logout(@RequestHeader("Authorization") String accessToken) {
+        authService.logout(accessToken);
+        return DtoToWebMapper.toWebResponse("Successfully logged out");
+    }
 }
