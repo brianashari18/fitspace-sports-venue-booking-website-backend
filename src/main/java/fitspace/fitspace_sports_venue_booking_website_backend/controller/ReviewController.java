@@ -6,6 +6,7 @@ import fitspace.fitspace_sports_venue_booking_website_backend.dto.review.ReviewA
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.review.ReviewDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.entity.User;
 import fitspace.fitspace_sports_venue_booking_website_backend.service.ReviewService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,7 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@Slf4j
+@RestController
 public class ReviewController {
 
     @Autowired
@@ -27,6 +29,9 @@ public class ReviewController {
     )
     public WebResponse<ReviewDataResponse> create(@PathVariable("fieldId") Integer fieldId , User user, @RequestBody ReviewAddRequest request){
         ReviewDataResponse reviewDataResponse = reviewService.create(fieldId,user,request);
+
+        log.info("DATA: {}", reviewDataResponse);
+
         return WebResponse.<ReviewDataResponse>builder()
                 .code(HttpStatus.OK.value())
                 .status(HttpStatus.OK.getReasonPhrase())

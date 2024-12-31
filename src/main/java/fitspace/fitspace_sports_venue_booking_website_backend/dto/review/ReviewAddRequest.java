@@ -19,7 +19,4 @@ public class ReviewAddRequest {
     @NotBlank
     private String comment;
 
-    @NotBlank
-    private String url;
-
 }
