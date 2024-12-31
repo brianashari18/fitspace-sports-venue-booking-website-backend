@@ -27,7 +27,7 @@ public class FieldController {
     )
     public WebResponse<FieldDataResponse> add(User user, @RequestBody FieldAddRequest request,
                                               @PathVariable("venueId") Long venueId) {
-        FieldDataResponse fieldDataResponse = fieldService.add(request, venueId);
+        FieldDataResponse fieldDataResponse = fieldService.add(user, request, venueId);
         return DtoToWebMapper.toWebResponse(fieldDataResponse);
     }
 
@@ -36,7 +36,7 @@ public class FieldController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public WebResponse<FieldDataResponse> get(User user, @PathVariable("venueId") Long venueId, @PathVariable("fieldId") Long fieldId) {
-        FieldDataResponse fieldDataResponse = fieldService.get(venueId, fieldId);
+        FieldDataResponse fieldDataResponse = fieldService.get(user, venueId, fieldId);
         return DtoToWebMapper.toWebResponse(fieldDataResponse);
     }
 
@@ -45,15 +45,15 @@ public class FieldController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public WebResponse<List<FieldDataResponse>> get(User user, @PathVariable("venueId") Long venueId) {
-        List<FieldDataResponse> fieldDataResponses = fieldService.getAll(venueId);
+        List<FieldDataResponse> fieldDataResponses = fieldService.getAll(user, venueId);
         return DtoToWebMapper.toWebResponse(fieldDataResponses);
     }
 
     @PatchMapping(
-            path = "/api/fields/{fieldId}"
+            path = "/api/venues/{venueId}/fields/{fieldId}"
     )
-    public WebResponse<FieldDataResponse> update(User user, @RequestBody FieldUpdateRequest request, @PathVariable("fieldId") Long fieldId) {
-        FieldDataResponse fieldDataResponse = fieldService.update(request, fieldId);
+    public WebResponse<FieldDataResponse> update(User user, @RequestBody FieldUpdateRequest request, @PathVariable("venueId") Long venueId, @PathVariable("fieldId") Long fieldId) {
+        FieldDataResponse fieldDataResponse = fieldService.update(user, request, venueId, fieldId);
         return DtoToWebMapper.toWebResponse(fieldDataResponse);
     }
 
@@ -62,7 +62,7 @@ public class FieldController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public WebResponse<String> delete(User user, @PathVariable("venueId") Long venueId, @PathVariable("fieldId") Long fieldId) {
-        fieldService.delete(venueId, fieldId);
+        fieldService.delete(user, venueId, fieldId);
         return DtoToWebMapper.toWebResponse("Successfully deleted field");
     }
 }

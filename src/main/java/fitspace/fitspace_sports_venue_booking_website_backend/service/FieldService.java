@@ -18,10 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -78,7 +75,7 @@ public class FieldService {
     }
 
 
-    public FieldDataResponse add(FieldAddRequest request, Long venueId) {
+    public FieldDataResponse add(User user, FieldAddRequest request, Long venueId) {
         validationService.validate(request);
 
         LocalDate today = LocalDate.now();
@@ -97,6 +94,10 @@ public class FieldService {
 
         Venue venue = venueRepository.findById(venueId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Venue is not found"));
+
+        if (!Objects.equals(venue.getOwner().getId(), user.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not owner of this venue");
+        }
 
         List<Photo> gallery = request.getGallery().stream().map(photoAddRequest -> {
             Photo photo = new Photo();
@@ -121,19 +122,35 @@ public class FieldService {
         return EntityToDtoMapper.toFieldDataResponse(newField);
     }
 
-    public FieldDataResponse get(Long venueId, Long fieldId) {
+    public FieldDataResponse get(User user, Long venueId, Long fieldId) {
         Venue venue = venueRepository.findById(venueId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Venue is not found"));
+
+        if (!Objects.equals(venue.getOwner().getId(), user.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not owner of this venue");
+        }
+
         Field field = fieldRepository.findFirstByIdAndVenue(fieldId, venue).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Field is not found"));
         return EntityToDtoMapper.toFieldDataResponse(field);
     }
 
-    public List<FieldDataResponse> getAll(Long venueId) {
+    public List<FieldDataResponse> getAll(User user, Long venueId) {
         Venue venue = venueRepository.findById(venueId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Venue is not found"));
+
+        if (!Objects.equals(venue.getOwner().getId(), user.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not owner of this venue");
+        }
+
         List<Field> fields = fieldRepository.findAllByVenue(venue);
         return fields.stream().map(EntityToDtoMapper::toFieldDataResponse).toList();
     }
 
-    public FieldDataResponse update(FieldUpdateRequest request, Long fieldId) {
+    public FieldDataResponse update(User user, FieldUpdateRequest request, Long venueId, Long fieldId) {
+        Venue venue = venueRepository.findById(venueId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Venue is not found"));
+
+        if (!Objects.equals(venue.getOwner().getId(), user.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not owner of this venue");
+        }
+
         Field field = fieldRepository.findById(fieldId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Field not found"));
 
@@ -169,19 +186,22 @@ public class FieldService {
         }
 
 
-
         fieldRepository.save(field);
 
         return EntityToDtoMapper.toFieldDataResponse(field);
     }
 
-    public void delete(Long venueId, Long fieldId) {
+    public void delete(User user, Long venueId, Long fieldId) {
         Venue venue = venueRepository.findById(venueId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Venue is not found"));
+
+        if (!Objects.equals(venue.getOwner().getId(), user.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not owner of this venue");
+        }
+
         Field field = fieldRepository.findFirstByIdAndVenue(fieldId, venue).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Field is not found"));
 
         fieldRepository.delete(field);
     }
-
 
 
 }

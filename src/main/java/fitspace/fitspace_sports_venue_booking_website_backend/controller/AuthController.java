@@ -5,6 +5,8 @@ import fitspace.fitspace_sports_venue_booking_website_backend.dto.WebResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.entity.User;
 import fitspace.fitspace_sports_venue_booking_website_backend.helper.DtoToWebMapper;
 import fitspace.fitspace_sports_venue_booking_website_backend.service.AuthService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class AuthController {
 
+    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
     @Autowired
     private AuthService authService;
 
@@ -25,16 +28,6 @@ public class AuthController {
         TokenResponse tokenResponse = authService.login(request);
         return DtoToWebMapper.toWebResponse(tokenResponse);
     }
-//
-//    @DeleteMapping(
-//            path = "/api/auth/logout",
-//            produces = MediaType.APPLICATION_JSON_VALUE
-//    )
-//    public WebResponse<String> logout(User user) {
-//        authService.logout(user);
-//
-//        return DtoToWebMapper.toWebResponse("Successfully logout");
-//    }
 
     @PostMapping(
             path = "/api/auth/forgot-password",
@@ -61,9 +54,10 @@ public class AuthController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-
     public WebResponse<String> resetPassword(@RequestBody UserResetPasswordRequest request, User user) {
+        log.info("REQ: {}", request);
         authService.resetPassword(request, user);
+        log.info("TEST");
         return DtoToWebMapper.toWebResponse("Password has been reset successfully");
     }
 
