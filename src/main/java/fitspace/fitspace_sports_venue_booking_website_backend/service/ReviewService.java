@@ -47,7 +47,7 @@ public class ReviewService {
 
         try {
             reviewRepository.save(review);
-            log.info("Review saved for field ID {} by user ID {}", review.getField().getId(), review.getUser().getId());
+            log.info("Review save   d for field ID {} by user ID {}", review.getField().getId(), review.getUser().getId());
 
         } catch (Exception e) {
             log.error("Failed to save review: {}", e.getMessage());
