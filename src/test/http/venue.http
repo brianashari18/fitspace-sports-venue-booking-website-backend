@@ -40,4 +40,4 @@ GET http://localhost:8080/api/venues
 
 ### Get All Venue From Some Owner
 GET http://localhost:8080/api/venues/owner
-Authorization: 2e39c1ab-583f-4a23-a707-743a48e52c2c
+Authorization: d1cc1fdd-fe12-4bf0-a3cc-25c6c316c006
