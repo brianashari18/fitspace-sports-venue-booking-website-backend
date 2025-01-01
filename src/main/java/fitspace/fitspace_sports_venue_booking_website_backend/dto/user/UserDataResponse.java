@@ -21,4 +21,6 @@ public class UserDataResponse {
     @JsonProperty("last_name")
     private String lastName;
 
+    private String role;
+
 }

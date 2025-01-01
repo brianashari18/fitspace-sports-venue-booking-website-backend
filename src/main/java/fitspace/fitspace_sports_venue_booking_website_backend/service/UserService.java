@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -64,5 +66,18 @@ public class UserService {
         return EntityToDtoMapper.toUserDataResponse(user);
     }
 
+    @Transactional
+    public void delete(long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        userRepository.delete(user);
+    }
+
+    @Transactional
+    public List<UserDataResponse> getAll() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(EntityToDtoMapper::toUserDataResponse)
+                .toList();
+    }
 
 }

@@ -75,4 +75,13 @@ public class VenueController {
         List<VenueDataResponse> venueDataResponses = venueService.getAllFromOwner(user);
         return DtoToWebMapper.toWebResponse(venueDataResponses);
     }
+
+    @DeleteMapping(
+            path = "/api/venues/{venueId}/delete",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public WebResponse<String> deleteReview(@PathVariable("venueId") Long id) {
+        venueService.deleteVenueAdmin(id);
+        return DtoToWebMapper.toWebResponse("Successfully deleted venue");
+    }
 }
