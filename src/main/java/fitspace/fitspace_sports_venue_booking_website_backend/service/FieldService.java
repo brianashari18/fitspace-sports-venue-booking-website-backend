@@ -3,6 +3,7 @@ package fitspace.fitspace_sports_venue_booking_website_backend.service;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.field.FieldAddRequest;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.field.FieldDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.field.FieldUpdateRequest;
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.photo.PhotoAddRequest;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.photo.PhotoDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.review.ReviewDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.schedule.ScheduleDataResponse;
@@ -12,10 +13,17 @@ import fitspace.fitspace_sports_venue_booking_website_backend.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -25,6 +33,10 @@ import java.util.stream.Collectors;
 public class FieldService {
 
     private static final Logger log = LoggerFactory.getLogger(FieldService.class);
+
+    @Value("${photo.upload-dir}")
+    private String uploadDir;
+
     @Autowired
     private FieldRepository fieldRepository;
 
@@ -75,23 +87,10 @@ public class FieldService {
     }
 
 
-    public FieldDataResponse add(User user, FieldAddRequest request, Long venueId) {
+    public FieldDataResponse add(User user, FieldAddRequest request, List<MultipartFile> files, Long venueId) {
         validationService.validate(request);
 
-        LocalDate today = LocalDate.now();
-        LocalDate startOfWeek = today.with(java.time.DayOfWeek.MONDAY);
-        LocalDate endOfWeek = startOfWeek.plusDays(6);
-
-        List<Schedule> schedulesThisWeek = scheduleRepository.findSchedulesForWeek(startOfWeek, endOfWeek);
-        if (schedulesThisWeek.isEmpty()) {
-            createScheduleIfNotExist();
-            schedulesThisWeek = scheduleRepository.findSchedulesForWeek(startOfWeek, endOfWeek);
-        }
-
-        Field newField = new Field();
-        newField.setPrice(request.getPrice());
-        newField.setType(request.getType());
-
+        // Validasi dan pencarian Venue
         Venue venue = venueRepository.findById(venueId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Venue is not found"));
 
@@ -99,27 +98,75 @@ public class FieldService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not owner of this venue");
         }
 
-        List<Photo> gallery = request.getGallery().stream().map(photoAddRequest -> {
-            Photo photo = new Photo();
-            photo.setPhotoUrl(photoAddRequest.getPhotoUrl());
-            photo.setField(newField);
-            return photo;
-        }).toList();
-
-        List<FieldSchedule> fieldSchedules = schedulesThisWeek.stream().map(schedule -> {
-            FieldSchedule fieldSchedule = new FieldSchedule();
-            fieldSchedule.setField(newField);
-            fieldSchedule.setSchedule(schedule);
-            return fieldSchedule;
-        }).toList();
-
-        newField.setGallery(gallery);
+        // Buat entitas Field
+        Field newField = new Field();
+        newField.setPrice(request.getPrice());
+        newField.setType(request.getType());
         newField.setVenue(venue);
-        newField.setFieldSchedules(fieldSchedules);
 
-        fieldRepository.save(newField);
+        // Simpan Field terlebih dahulu untuk mendapatkan ID
+        Field finalNewField = fieldRepository.save(newField);
 
-        return EntityToDtoMapper.toFieldDataResponse(newField);
+        // Simpan daftar foto ke Gallery setelah Field memiliki ID
+        List<Photo> gallery = new ArrayList<>();
+        for (MultipartFile file : files) {
+            String fileName = saveFileLocally(file);
+            String photoUrl = "/uploads/" + fileName;
+
+            Photo photo = new Photo();
+            photo.setPhotoUrl(photoUrl);
+            photo.setField(finalNewField); // Set Field yang sudah memiliki ID
+
+            gallery.add(photo);
+        }
+        photoRepository.saveAll(gallery);
+
+        // Buat dan simpan FieldSchedule untuk minggu berjalan
+        List<Schedule> schedulesThisWeek = scheduleRepository.findSchedulesForWeek(
+                LocalDate.now().with(java.time.DayOfWeek.MONDAY),
+                LocalDate.now().with(java.time.DayOfWeek.SUNDAY)
+        );
+        if (schedulesThisWeek.isEmpty()) {
+            createScheduleIfNotExist();
+            schedulesThisWeek = scheduleRepository.findSchedulesForWeek(
+                    LocalDate.now().with(java.time.DayOfWeek.MONDAY),
+                    LocalDate.now().with(java.time.DayOfWeek.SUNDAY)
+            );
+        }
+
+        List<FieldSchedule> fieldSchedules = schedulesThisWeek.stream()
+                .map(schedule -> {
+                    FieldSchedule fieldSchedule = new FieldSchedule();
+                    fieldSchedule.setField(finalNewField);
+                    fieldSchedule.setSchedule(schedule);
+                    return fieldSchedule;
+                }).toList();
+        fieldScheduleRepository.saveAll(fieldSchedules);
+
+        finalNewField.setGallery(gallery);
+        finalNewField.setFieldSchedules(fieldSchedules);
+
+        return EntityToDtoMapper.toFieldDataResponse(finalNewField);
+    }
+
+
+    private String saveFileLocally(MultipartFile file) {
+        try {
+            String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename().replace(" ", "_");
+
+
+            File directory = new File(uploadDir);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+
+            Path path = Paths.get(uploadDir, fileName);
+            Files.write(path, file.getBytes());
+
+            return fileName;
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save file", e);
+        }
     }
 
     public FieldDataResponse get(User user, Long venueId, Long fieldId) {

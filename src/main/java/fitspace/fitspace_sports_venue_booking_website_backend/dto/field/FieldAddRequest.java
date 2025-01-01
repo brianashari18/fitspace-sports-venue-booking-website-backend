@@ -23,7 +23,4 @@ public class FieldAddRequest {
     @NotBlank
     private String type;
 
-    @NotEmpty
-    private List<PhotoAddRequest> gallery;
-
 }

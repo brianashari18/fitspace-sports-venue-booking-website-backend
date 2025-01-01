@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -22,14 +23,19 @@ public class FieldController {
 
     @PostMapping(
             path = "/api/venues/{venueId}/fields",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
+            consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE},
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public WebResponse<FieldDataResponse> add(User user, @RequestBody FieldAddRequest request,
-                                              @PathVariable("venueId") Long venueId) {
-        FieldDataResponse fieldDataResponse = fieldService.add(user, request, venueId);
+    public WebResponse<FieldDataResponse> add(
+            User user,
+            @PathVariable("venueId") Long venueId,
+            @RequestPart("field") FieldAddRequest fieldAddRequest,
+            @RequestPart("files") List<MultipartFile> files
+    ) {
+        FieldDataResponse fieldDataResponse = fieldService.add(user, fieldAddRequest, files, venueId);
         return DtoToWebMapper.toWebResponse(fieldDataResponse);
     }
+
 
     @GetMapping(
             path = "/api/venues/{venueId}/fields/{fieldId}",
