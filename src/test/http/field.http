@@ -1,6 +1,6 @@
 ### Create field
-POST http://localhost:8080/api/venues/3/fields
-Authorization: fb3d24a0-3e01-422f-976b-1f95eaffd141
+POST http://localhost:8080/api/venues/5/fields
+Authorization: ebaf4f5b-ebb7-48ca-bf89-8da1a343aef4
 Content-Type: application/json
 
 {
@@ -20,12 +20,12 @@ Content-Type: application/json
 }
 
 ### Get field
-GET http://localhost:8080/api/venues/3/fields/4
-Authorization: 6e2c539c-cae9-459a-88ce-62c9e657cd49
+GET http://localhost:8080/api/venues/1/fields/4
+Authorization: ebaf4f5b-ebb7-48ca-bf89-8da1a343aef4
 
-### Get field
-GET http://localhost:8080/api/venues/3/fields
-Authorization: f46e534f-7a19-4ba9-8983-fba535788238
+### Get all field
+GET http://localhost:8080/api/venues/5/fields
+Authorization: ebaf4f5b-ebb7-48ca-bf89-8da1a343aef4
 
 ### Delete field
 DELETE http://localhost:8080/api/venues/3/fields/5

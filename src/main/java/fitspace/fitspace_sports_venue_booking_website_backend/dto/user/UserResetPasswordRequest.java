@@ -16,6 +16,9 @@ import lombok.NoArgsConstructor;
 @PasswordMatches
 public class UserResetPasswordRequest {
 
+    @JsonProperty("current_password")
+    private String currentPassword;
+
     @NotBlank
     @Size(min = 8, max = 100)
     @JsonProperty("new_password")

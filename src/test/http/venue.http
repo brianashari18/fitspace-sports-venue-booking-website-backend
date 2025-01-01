@@ -1,6 +1,6 @@
 ### Create Venue
 POST http://localhost:8080/api/venues
-Authorization: fb3d24a0-3e01-422f-976b-1f95eaffd141
+Authorization: 2e39c1ab-583f-4a23-a707-743a48e52c2c
 Content-Type: application/json
 
 {
@@ -20,7 +20,7 @@ GET http://localhost:8080/api/venues/3
 
 ### Update Venue
 PATCH http://localhost:8080/api/venues/3
-Authorization: a0906db0-2efc-4254-8cd5-fd71739bc9ba
+Authorization: ebaf4f5b-ebb7-48ca-bf89-8da1a343aef4
 Content-Type: application/json
 
 {
@@ -40,4 +40,4 @@ GET http://localhost:8080/api/venues
 
 ### Get All Venue From Some Owner
 GET http://localhost:8080/api/venues/owner
-Authorization: ef3d0f01-d631-459b-a903-72589dd88603
+Authorization: 2e39c1ab-583f-4a23-a707-743a48e52c2c

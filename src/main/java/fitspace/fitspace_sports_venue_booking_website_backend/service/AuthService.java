@@ -90,7 +90,15 @@ public class AuthService {
 
     @Transactional
     public void resetPassword(UserResetPasswordRequest request, User user) {
+        log.info("TEST1");
         validationService.validate(request);
+        log.info("TEST");
+
+        if (request.getCurrentPassword() != null && !request.getCurrentPassword().isEmpty()) {
+            if (!BCrypt.checkpw(request.getCurrentPassword(), user.getPassword())) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid password");
+            }
+        }
 
         user.setPassword(BCrypt.hashpw(request.getPassword(), BCrypt.gensalt()));
         userRepository.save(user);
@@ -137,6 +145,8 @@ public class AuthService {
             body.add("token", accessToken);
 
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
+
+            log.info("Request: {}", request);
 
             ResponseEntity<String> response = restTemplate.postForEntity(revokeUrl, request, String.class);
 
