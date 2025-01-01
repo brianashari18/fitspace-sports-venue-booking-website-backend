@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -39,10 +40,10 @@ public class Field {
     private List<Review> reviews;
 
     @OneToMany(mappedBy = "field", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Photo> gallery;
+    private List<Photo> gallery = new ArrayList<>(); // Inisialisasi dengan ArrayList
 
     @OneToMany(mappedBy = "field", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<FieldSchedule> fieldSchedules;
+    private List<FieldSchedule> fieldSchedules = new ArrayList<>(); // Inisialisasi dengan ArrayList
 
 
 }

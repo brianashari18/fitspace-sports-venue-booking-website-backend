@@ -23,8 +23,6 @@ public class Photo {
     @Column(name = "photo_url")
     private String photoUrl;
 
-    private String description;
-
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 

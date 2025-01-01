@@ -99,7 +99,7 @@ public class VenueService {
 
     @Transactional(readOnly = true)
     public List<VenueDataResponse> getAll() {
-        List<Venue> venues = venueRepository.findAll();
+        List<Venue> venues = venueRepository.findAllWithFields();
 
         if (venues.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No venue has been added yet");

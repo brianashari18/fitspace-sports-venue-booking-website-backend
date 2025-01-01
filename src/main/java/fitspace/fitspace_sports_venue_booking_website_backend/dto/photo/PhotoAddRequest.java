@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class PhotoAddRequest {
 
-    @NotBlank
     @JsonProperty("photo_url")
     private String photoUrl;
 
