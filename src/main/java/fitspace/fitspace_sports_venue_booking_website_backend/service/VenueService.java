@@ -122,4 +122,12 @@ public class VenueService {
                 .map(EntityToDtoMapper::toVenueDataResponse)
                 .toList();
     }
+
+    @Transactional
+    public void deleteVenueAdmin(Long id) {
+        Venue venue = venueRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Venue not found"));
+
+        venueRepository.delete(venue);
+    }
 }

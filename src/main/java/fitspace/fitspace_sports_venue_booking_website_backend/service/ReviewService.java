@@ -2,6 +2,7 @@ package fitspace.fitspace_sports_venue_booking_website_backend.service;
 
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.review.ReviewAddRequest;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.review.ReviewDataResponse;
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.review.ReviewUpdateRequest;
 import fitspace.fitspace_sports_venue_booking_website_backend.entity.Field;
 import fitspace.fitspace_sports_venue_booking_website_backend.entity.Review;
 import fitspace.fitspace_sports_venue_booking_website_backend.entity.User;
@@ -73,11 +74,38 @@ public class ReviewService {
     }
 
     @Transactional
-    public void delete(Integer reviewId, Integer fieldId) {
+    public void delete(Long reviewId) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Review not found"));
 
         reviewRepository.delete(review);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ReviewDataResponse> getAlls() {
+        List<Review> reviews = reviewRepository.findAll();
+
+        return reviews.stream()
+                .map(EntityToDtoMapper::toReviewDataResponse)
+                .toList();
+    }
+
+    @Transactional
+    public ReviewDataResponse update(long review_id, ReviewUpdateRequest request) {
+        Review review = reviewRepository.findById(review_id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Review not found"));
+
+        if(request.getComment() != null) {
+            review.setComment(request.getComment());
+        }
+
+        if(request.getRating() != null) {
+            review.setRating(request.getRating());
+        }
+
+        reviewRepository.save(review);
+
+        return EntityToDtoMapper.toReviewDataResponse(review);
     }
 
 }

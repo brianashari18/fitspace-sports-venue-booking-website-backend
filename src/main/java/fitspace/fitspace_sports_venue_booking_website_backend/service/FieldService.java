@@ -250,5 +250,9 @@ public class FieldService {
         fieldRepository.delete(field);
     }
 
+    public List<FieldDataResponse> getAllField() {
+        List<Field> fields = fieldRepository.findAll();
+        return fields.stream().map(EntityToDtoMapper::toFieldDataResponse).toList();
+    }
 
 }

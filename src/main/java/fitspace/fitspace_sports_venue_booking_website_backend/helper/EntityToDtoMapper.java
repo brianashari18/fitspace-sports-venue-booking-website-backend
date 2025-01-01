@@ -25,6 +25,7 @@ public class EntityToDtoMapper {
                 .email(user.getEmail())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
+                .role(user.getRole())
                 .build();
     }
 

@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class UserController {
 
@@ -45,5 +47,23 @@ public class UserController {
     public WebResponse<UserDataResponse> update(User user, @RequestBody UserUpdateRequest request) {
         UserDataResponse userDataResponse = userService.update(user, request);
         return DtoToWebMapper.toWebResponse(userDataResponse);
+    }
+
+    @DeleteMapping(
+            path = "/api/{userId}/delete",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public WebResponse<String> delete(@PathVariable("userId") Long userId) {
+        userService.delete(userId);
+        return DtoToWebMapper.toWebResponse("Delete Success");
+    }
+
+    @GetMapping(
+            path = "/api/users",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public WebResponse<List<UserDataResponse>> getAll() {
+        List<UserDataResponse> userDataResponses = userService.getAll();
+        return DtoToWebMapper.toWebResponse(userDataResponses);
     }
 }

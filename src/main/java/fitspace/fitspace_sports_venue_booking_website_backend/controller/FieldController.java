@@ -71,4 +71,15 @@ public class FieldController {
         fieldService.delete(user, venueId, fieldId);
         return DtoToWebMapper.toWebResponse("Successfully deleted field");
     }
+
+    @GetMapping(
+            path = "/api/fields",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public WebResponse<List<FieldDataResponse>> getAllField() {
+        List<FieldDataResponse> fieldDataResponses = fieldService.getAllField();
+        return DtoToWebMapper.toWebResponse(fieldDataResponses);
+    }
+
+
 }
