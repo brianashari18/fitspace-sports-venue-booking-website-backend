@@ -12,6 +12,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class BookingUpdateStatusRequest {
 
-    @NotBlank
     private String status;
 }
