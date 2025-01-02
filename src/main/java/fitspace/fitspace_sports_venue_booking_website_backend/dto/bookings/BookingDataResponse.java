@@ -16,6 +16,10 @@ public class BookingDataResponse {
 
     private String status;
 
+    private String price;
+
+    private String name;
+
     @JsonProperty("customer_id")
     private long customerId;
 

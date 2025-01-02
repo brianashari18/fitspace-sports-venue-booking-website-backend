@@ -24,6 +24,10 @@ public class Booking {
 
     private String status;
 
+    private String name;
+
+    private String price;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 

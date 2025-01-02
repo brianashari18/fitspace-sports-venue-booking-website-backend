@@ -114,6 +114,8 @@ public class EntityToDtoMapper {
                 .customerId(booking.getCustomer().getId())
                 .scheduleId(booking.getSchedule().getId())
                 .status(booking.getStatus())
+                .name(booking.getName())
+                .price(booking.getPrice())
                 .build();
     }
 }

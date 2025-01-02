@@ -4,6 +4,7 @@ import fitspace.fitspace_sports_venue_booking_website_backend.dto.WebResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.bookings.BookingAddRequest;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.bookings.BookingDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.bookings.BookingUpdateStatusRequest;
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.schedule.ScheduleDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.entity.User;
 import fitspace.fitspace_sports_venue_booking_website_backend.helper.DtoToWebMapper;
 import fitspace.fitspace_sports_venue_booking_website_backend.service.BookingService;
@@ -39,11 +40,7 @@ public class BookingController {
     )
     public WebResponse <List<BookingDataResponse>> get(User user) {
         List<BookingDataResponse> bookings = bookingService.get(user);
-        return WebResponse.<List<BookingDataResponse>>builder()
-                .code(HttpStatus.OK.value())
-                .status(HttpStatus.OK.getReasonPhrase())
-                .data(bookings)
-                .build();
+        return DtoToWebMapper.toWebResponse(bookings);
     }
 
     @DeleteMapping(
@@ -88,10 +85,20 @@ public class BookingController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public WebResponse<BookingDataResponse> updateBook(@PathVariable("bookingId") long bookingId, @RequestBody BookingUpdateStatusRequest request) {
-        System.out.println("request:" + request.toString());
+    public WebResponse<BookingDataResponse> updateBook(@PathVariable("bookingId")Long bookingId, @RequestBody BookingUpdateStatusRequest request) {
         BookingDataResponse bookingDataResponse = bookingService.updateBooking(bookingId,request);
 
         return DtoToWebMapper.toWebResponse(bookingDataResponse);
     }
+
+    @GetMapping(
+            path = "/api/bookings/schedule/{id}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public WebResponse<ScheduleDataResponse> getScheduleByBooking(@PathVariable Long id) {
+        log.info("getScheduleByBooking {}", id);
+        ScheduleDataResponse schedule = bookingService.getScheduleByBooking(id);
+        return DtoToWebMapper.toWebResponse(schedule);
+    }
+
 }
