@@ -23,4 +23,5 @@ public class FieldUpdateRequest {
 
     private List<FieldScheduleUpdateRequest> fieldSchedules;
 
+    private List<String> removedImages;
 }

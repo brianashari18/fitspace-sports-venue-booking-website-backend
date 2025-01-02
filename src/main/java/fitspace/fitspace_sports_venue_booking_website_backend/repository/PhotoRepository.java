@@ -15,6 +15,7 @@ public interface PhotoRepository extends JpaRepository<Photo, Long> {
 
     Photo findByPhotoUrl(String photoUrl);
     List<Photo> findByPhotoUrlIn(Set<String> photoUrls);
+    List<Photo> findAllByPhotoUrlIn(List<String> photoUrls);
 
     void deleteAllByField(Field field);
 }

@@ -121,7 +121,6 @@ public class FieldService {
         }
         photoRepository.saveAll(gallery);
 
-        // Buat dan simpan FieldSchedule untuk minggu berjalan
         List<Schedule> schedulesThisWeek = scheduleRepository.findSchedulesForWeek(
                 LocalDate.now().with(java.time.DayOfWeek.MONDAY),
                 LocalDate.now().with(java.time.DayOfWeek.SUNDAY)
@@ -139,6 +138,7 @@ public class FieldService {
                     FieldSchedule fieldSchedule = new FieldSchedule();
                     fieldSchedule.setField(finalNewField);
                     fieldSchedule.setSchedule(schedule);
+                    fieldSchedule.setStatus("Available");
                     return fieldSchedule;
                 }).toList();
         fieldScheduleRepository.saveAll(fieldSchedules);
@@ -191,7 +191,7 @@ public class FieldService {
         return fields.stream().map(EntityToDtoMapper::toFieldDataResponse).toList();
     }
 
-    public FieldDataResponse update(User user, FieldUpdateRequest request, Long venueId, Long fieldId) {
+    public FieldDataResponse update(User user, FieldUpdateRequest request, List<MultipartFile> files, Long venueId, Long fieldId) {
         Venue venue = venueRepository.findById(venueId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Venue is not found"));
 
         if (!Objects.equals(venue.getOwner().getId(), user.getId())) {
@@ -214,14 +214,31 @@ public class FieldService {
             fieldScheduleRepository.saveAll(existingFieldSchedules);
         }
 
-        if (request.getGallery() != null && !request.getGallery().isEmpty()) {
-            field.getGallery().clear(); // Clears the existing collection but keeps the same collection instance
-            request.getGallery().stream().map(photoUpdateRequest -> {
+        if (request.getRemovedImages() != null && !request.getRemovedImages().isEmpty()) {
+            List<Photo> photosToRemove = photoRepository.findAllByPhotoUrlIn(request.getRemovedImages());
+            photoRepository.deleteAll(photosToRemove);
+
+            // Hapus file dari sistem
+            photosToRemove.forEach(photo -> {
+                Path path = Paths.get(uploadDir, photo.getPhotoUrl().replace("/uploads/", ""));
+                try {
+                    Files.deleteIfExists(path);
+                } catch (IOException e) {
+                    log.error("Failed to delete file: " + path, e);
+                }
+            });
+        }
+
+        if (files != null && !files.isEmpty()) {
+            List<Photo> newPhotos = files.stream().map(file -> {
+                String fileName = saveFileLocally(file);
                 Photo photo = new Photo();
-                photo.setPhotoUrl(photoUpdateRequest.getPhotoUrl());
+                photo.setPhotoUrl("/uploads/" + fileName);
                 photo.setField(field);
                 return photo;
-            }).forEach(field.getGallery()::add);
+            }).toList();
+            photoRepository.saveAll(newPhotos);
+            field.getGallery().addAll(newPhotos);
         }
 
         if (request.getPrice() != null) {

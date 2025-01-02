@@ -56,12 +56,20 @@ public class FieldController {
     }
 
     @PatchMapping(
-            path = "/api/venues/{venueId}/fields/{fieldId}"
+            path = "/api/venues/{venueId}/fields/{fieldId}",
+            consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE}
     )
-    public WebResponse<FieldDataResponse> update(User user, @RequestBody FieldUpdateRequest request, @PathVariable("venueId") Long venueId, @PathVariable("fieldId") Long fieldId) {
-        FieldDataResponse fieldDataResponse = fieldService.update(user, request, venueId, fieldId);
+    public WebResponse<FieldDataResponse> update(
+            User user,
+            @PathVariable("venueId") Long venueId,
+            @PathVariable("fieldId") Long fieldId,
+            @RequestPart("field") FieldUpdateRequest request,
+            @RequestPart(value = "files", required = false) List<MultipartFile> files
+    ) {
+        FieldDataResponse fieldDataResponse = fieldService.update(user, request, files, venueId, fieldId);
         return DtoToWebMapper.toWebResponse(fieldDataResponse);
     }
+
 
     @DeleteMapping(
             path = "/api/venues/{venueId}/fields/{fieldId}",
