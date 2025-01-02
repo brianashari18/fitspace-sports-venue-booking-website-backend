@@ -122,4 +122,25 @@ public class VenueService {
 
         venueRepository.delete(venue);
     }
+@Transactional
+    public void updateRating(long id , double rating) {
+    Venue venue = venueRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Venue not found"));
+    venue.setRating(rating);
+    venueRepository.save(venue);
+    }
+
+    @Transactional
+    public VenueDataResponse updateAdmin(Long id, VenueUpdateRequest request) {
+        validationService.validate(request);
+
+        Venue venue = venueRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Venue not found"));
+
+        BeanUtils.copyProperties(request, venue, getNullPropertyNames(request));
+
+        venueRepository.save(venue);
+        return EntityToDtoMapper.toVenueDataResponse(venue);
+    }
 }
+
