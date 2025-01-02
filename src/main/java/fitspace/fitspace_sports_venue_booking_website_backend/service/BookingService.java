@@ -39,7 +39,7 @@ public class BookingService {
         Venue venue = venueRepository.findById(venueId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Venue not found"));
 
-        Field field = fieldRepository.findByVenueAndType(venue,request.getFieldName())
+        Field field = fieldRepository.findFirstByVenueAndType(venue,request.getFieldName())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Field not found"));
 
         Schedule schedule = scheduleRepository.findByDateAndTimeSlot(request.getDate(), request.getTimeSlot())

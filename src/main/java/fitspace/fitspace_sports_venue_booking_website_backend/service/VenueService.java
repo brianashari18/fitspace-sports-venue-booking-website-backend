@@ -101,10 +101,6 @@ public class VenueService {
     public List<VenueDataResponse> getAll() {
         List<Venue> venues = venueRepository.findAllWithFields();
 
-        if (venues.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No venue has been added yet");
-        }
-
         return venues.stream()
                 .map(EntityToDtoMapper::toVenueDataResponse)
                 .toList();
@@ -113,10 +109,6 @@ public class VenueService {
     @Transactional(readOnly = true)
     public List<VenueDataResponse> getAllFromOwner(User user) {
         List<Venue> venues = venueRepository.findAllByOwner(user);
-
-        if (venues.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No venues found for the specified owner");
-        }
 
         return venues.stream()
                 .map(EntityToDtoMapper::toVenueDataResponse)

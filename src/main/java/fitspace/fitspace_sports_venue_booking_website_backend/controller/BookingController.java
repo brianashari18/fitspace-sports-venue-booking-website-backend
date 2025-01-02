@@ -7,6 +7,8 @@ import fitspace.fitspace_sports_venue_booking_website_backend.dto.bookings.Booki
 import fitspace.fitspace_sports_venue_booking_website_backend.entity.User;
 import fitspace.fitspace_sports_venue_booking_website_backend.helper.DtoToWebMapper;
 import fitspace.fitspace_sports_venue_booking_website_backend.service.BookingService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,6 +19,7 @@ import java.util.List;
 @RestController
 public class BookingController {
 
+    private static final Logger log = LoggerFactory.getLogger(BookingController.class);
     @Autowired
     private BookingService bookingService;
 
@@ -27,6 +30,7 @@ public class BookingController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public WebResponse<BookingDataResponse> create(User user, @PathVariable Long venueId, @RequestBody BookingAddRequest request) {
+        log.info("Create booking request: {}", request);
         BookingDataResponse bookingDataResponse = bookingService.create(user, venueId, request);
         return DtoToWebMapper.toWebResponse(bookingDataResponse);
     }
