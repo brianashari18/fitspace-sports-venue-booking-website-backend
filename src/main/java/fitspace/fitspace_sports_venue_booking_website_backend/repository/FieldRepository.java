@@ -16,5 +16,5 @@ public interface FieldRepository extends JpaRepository<Field, Long> {
 
     List<Field> findAll();
 
-    Optional<Field> findByVenueAndType(Venue venue, String type);
+    Optional<Field> findFirstByVenueAndType(Venue venue, String type);
 }
