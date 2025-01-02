@@ -8,6 +8,7 @@ import fitspace.fitspace_sports_venue_booking_website_backend.entity.*;
 import fitspace.fitspace_sports_venue_booking_website_backend.helper.EntityToDtoMapper;
 import fitspace.fitspace_sports_venue_booking_website_backend.repository.*;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class BookingService {
 
@@ -32,6 +34,8 @@ public class BookingService {
 
     @Autowired
     private VenueRepository venueRepository;
+    @Autowired
+    private ValidationService validationService;
 
     @Transactional
     public BookingDataResponse create(User user, Long venueId,BookingAddRequest request){
@@ -83,11 +87,39 @@ public class BookingService {
         bookingRepository.delete(book);
     }
 
+    @Transactional
     public BookingDataResponse updateStatus(User user, long bookingId, BookingUpdateStatusRequest request) {
         var book = bookingRepository.findByCustomerAndId(user,bookingId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
         book.setStatus(request.getStatus());
         return EntityToDtoMapper.toBookingDataResponse(bookingRepository.save(book));
+    }
+
+    @Transactional
+    public List<BookingDataResponse> getBookings() {
+        List<Booking> bookings = bookingRepository.findAll();
+        return bookings.stream()
+                .map(EntityToDtoMapper::toBookingDataResponse)
+                .toList();
+    }
+
+    @Transactional
+    public void deleteBooking(long bookingId) {
+        Booking booking = bookingRepository.findById(bookingId)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
+        bookingRepository.deleteById(bookingId);
+    }
+
+    @Transactional
+    public BookingDataResponse updateBooking(long bookingId, BookingUpdateStatusRequest request) {
+        validationService.validate(request);
+
+        log.info("REQ: {}", request);
+
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
+        booking.setStatus(request.getStatus());
+        return EntityToDtoMapper.toBookingDataResponse(bookingRepository.save(booking));
     }
 
 }
