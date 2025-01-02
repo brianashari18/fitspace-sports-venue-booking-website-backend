@@ -84,4 +84,23 @@ public class VenueController {
         venueService.deleteVenueAdmin(id);
         return DtoToWebMapper.toWebResponse("Successfully deleted venue");
     }
+
+    @PatchMapping(
+            path = "/api/venues/{venueId}/rating",
+            consumes = MediaType.APPLICATION_JSON_VALUE
+    )
+    public WebResponse<String> updateRating(@PathVariable("venueId") Long id,@RequestBody double rating) {
+        venueService.updateRating(id, rating);
+        return DtoToWebMapper.toWebResponse("Successfully updated rating");
+    }
+
+    @PatchMapping(
+            path = "/api/venues/{venueId}/update",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public WebResponse<VenueDataResponse> updateAdmin(User user, @PathVariable("venueId") Long venueId, @RequestBody VenueUpdateRequest request) {
+        VenueDataResponse venueDataResponse = venueService.updateAdmin(venueId, request);
+        return DtoToWebMapper.toWebResponse(venueDataResponse);
+    }
 }
