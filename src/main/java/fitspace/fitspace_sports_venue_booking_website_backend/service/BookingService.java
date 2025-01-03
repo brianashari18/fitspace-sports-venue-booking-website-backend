@@ -63,7 +63,7 @@ public class BookingService {
         booking.setStatus("ongoing");
         booking.setCustomer(user);
         booking.setSchedule(schedule);
-        booking.setName(venue.getName() + " " + request.getFieldName());
+        booking.setName(venue.getName() + " - " + request.getFieldName());
         booking.setPrice(request.getPrice());
         bookingRepository.save(booking);
 
