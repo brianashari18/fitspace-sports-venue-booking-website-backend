@@ -12,9 +12,9 @@ import java.util.Optional;
 @Repository
 public interface FieldScheduleRepository extends JpaRepository<FieldSchedule, Long> {
 
-    List<FieldSchedule> findBySchedule(Schedule schedule);
-    List<FieldSchedule> findAllByField(Field field);
-    FieldSchedule findFirstByField(Field field);
-
     Optional<FieldSchedule> findByFieldAndSchedule(Field field, Schedule schedule);
+
+    List<FieldSchedule> findAllBySchedule(Schedule schedule);
+
 }
+

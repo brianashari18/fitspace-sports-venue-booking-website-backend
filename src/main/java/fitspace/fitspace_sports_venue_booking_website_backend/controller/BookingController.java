@@ -96,7 +96,6 @@ public class BookingController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public WebResponse<ScheduleDataResponse> getScheduleByBooking(@PathVariable Long id) {
-        log.info("getScheduleByBooking {}", id);
         ScheduleDataResponse schedule = bookingService.getScheduleByBooking(id);
         return DtoToWebMapper.toWebResponse(schedule);
     }

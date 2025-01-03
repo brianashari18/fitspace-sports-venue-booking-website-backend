@@ -141,6 +141,7 @@ public class FieldService {
                     fieldSchedule.setStatus("Available");
                     return fieldSchedule;
                 }).toList();
+
         fieldScheduleRepository.saveAll(fieldSchedules);
 
         finalNewField.setGallery(gallery);
