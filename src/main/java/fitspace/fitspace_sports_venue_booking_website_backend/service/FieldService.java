@@ -51,6 +51,7 @@ public class FieldService {
 
     @Autowired
     private ValidationService validationService;
+
     @Autowired
     private FieldScheduleRepository fieldScheduleRepository;
 
@@ -170,6 +171,16 @@ public class FieldService {
     }
 
     public FieldDataResponse get(User user, Long venueId, Long fieldId) {
+
+        List<Schedule> schedulesThisWeek = scheduleRepository.findSchedulesForWeek(
+                LocalDate.now().with(java.time.DayOfWeek.MONDAY),
+                LocalDate.now().with(java.time.DayOfWeek.SUNDAY)
+        );
+
+        if (schedulesThisWeek.isEmpty()) {
+            createScheduleIfNotExist();
+        }
+
         Venue venue = venueRepository.findById(venueId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Venue is not found"));
 
         if (!Objects.equals(venue.getOwner().getId(), user.getId())) {
@@ -181,6 +192,7 @@ public class FieldService {
     }
 
     public List<FieldDataResponse> getAll(User user, Long venueId) {
+
         Venue venue = venueRepository.findById(venueId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Venue is not found"));
 
         if (!Objects.equals(venue.getOwner().getId(), user.getId())) {
