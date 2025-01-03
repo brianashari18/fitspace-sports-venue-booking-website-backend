@@ -4,6 +4,7 @@ import fitspace.fitspace_sports_venue_booking_website_backend.dto.bookings.Booki
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.bookings.BookingDataResponse;
 
 import fitspace.fitspace_sports_venue_booking_website_backend.dto.bookings.BookingUpdateStatusRequest;
+import fitspace.fitspace_sports_venue_booking_website_backend.dto.schedule.ScheduleDataResponse;
 import fitspace.fitspace_sports_venue_booking_website_backend.entity.*;
 import fitspace.fitspace_sports_venue_booking_website_backend.helper.EntityToDtoMapper;
 import fitspace.fitspace_sports_venue_booking_website_backend.repository.*;
@@ -62,6 +63,8 @@ public class BookingService {
         booking.setStatus("ongoing");
         booking.setCustomer(user);
         booking.setSchedule(schedule);
+        booking.setName(venue.getName() + " - " + request.getFieldName());
+        booking.setPrice(request.getPrice());
         bookingRepository.save(booking);
 
         return EntityToDtoMapper.toBookingDataResponse(booking);
@@ -71,12 +74,14 @@ public class BookingService {
     @Transactional
     public List<BookingDataResponse> get(User user) {
         var book =  bookingRepository.findAllByCustomer(user).stream().map(booking ->
-                 BookingDataResponse.builder()
-                         .id(booking.getId())
-                         .status(booking.getStatus())
-                         .customerId(booking.getCustomer().getId())
-                         .scheduleId(booking.getSchedule().getId())
-                         .build()).toList();
+                BookingDataResponse.builder()
+                        .id(booking.getId())
+                        .status(booking.getStatus())
+                        .customerId(booking.getCustomer().getId())
+                        .scheduleId(booking.getSchedule().getId())
+                        .price(booking.getPrice())
+                        .name(booking.getName())
+                        .build()).toList();
         return book;
     }
 
@@ -88,7 +93,7 @@ public class BookingService {
     }
 
     @Transactional
-    public BookingDataResponse updateStatus(User user, long bookingId, BookingUpdateStatusRequest request) {
+    public BookingDataResponse updateStatus(User user, Long bookingId, BookingUpdateStatusRequest request) {
         var book = bookingRepository.findByCustomerAndId(user,bookingId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
         book.setStatus(request.getStatus());
@@ -104,22 +109,59 @@ public class BookingService {
     }
 
     @Transactional
-    public void deleteBooking(long bookingId) {
+    public void deleteBooking(Long bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
         bookingRepository.deleteById(bookingId);
     }
 
     @Transactional
-    public BookingDataResponse updateBooking(long bookingId, BookingUpdateStatusRequest request) {
+    public BookingDataResponse updateBooking(Long bookingId, BookingUpdateStatusRequest request) {
+        // Validate the request
         validationService.validate(request);
 
-        log.info("REQ: {}", request);
-
+        // Retrieve the booking
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
+
+        // Retrieve the associated schedule
+        Schedule schedule = booking.getSchedule();
+        if (schedule == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule not found for booking");
+        }
+
+        // Retrieve the FieldSchedule using the schedule
+        List<FieldSchedule> fieldSchedules = fieldScheduleRepository.findAllBySchedule(schedule);
+
+        if (fieldSchedules.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "FieldSchedules not found for schedule");
+        }
+
+        // Update the status of all associated FieldSchedules
+        for (FieldSchedule fieldSchedule : fieldSchedules) {
+            if ("canceled".equalsIgnoreCase(request.getStatus()) || "finished".equalsIgnoreCase(request.getStatus())) {
+                fieldSchedule.setStatus("available");
+            } else if ("ongoing".equalsIgnoreCase(request.getStatus())) {
+                fieldSchedule.setStatus("not available");
+            }
+            fieldScheduleRepository.save(fieldSchedule);
+        }
+
+        // Update the booking status
         booking.setStatus(request.getStatus());
-        return EntityToDtoMapper.toBookingDataResponse(bookingRepository.save(booking));
+        bookingRepository.save(booking);
+
+        // Return the updated booking as DTO
+        return EntityToDtoMapper.toBookingDataResponse(booking);
     }
 
+
+    @Transactional
+    public ScheduleDataResponse getScheduleByBooking(Long bookingId) {
+        var booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
+        var schedule = booking.getSchedule();
+
+        return EntityToDtoMapper.toScheduleDataResponse(schedule);
+    }
 }

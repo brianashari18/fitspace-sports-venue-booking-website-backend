@@ -1,6 +1,7 @@
 ### Create field
 POST http://localhost:8080/api/venues/5/fields
-Authorization: ebaf4f5b-ebb7-48ca-bf89-8da1a343aef4
+Authorization: 9f1bd86e-090d-41f1-93dd-79240ce54a72
+Content-Type: multipart/form-data
 Content-Type: application/json
 
 {
@@ -21,7 +22,7 @@ Content-Type: application/json
 
 ### Get field
 GET http://localhost:8080/api/venues/1/fields/4
-Authorization: ebaf4f5b-ebb7-48ca-bf89-8da1a343aef4
+Authorization: 9f1bd86e-090d-41f1-93dd-79240ce54a72
 
 ### Get all field
 GET http://localhost:8080/api/venues/5/fields

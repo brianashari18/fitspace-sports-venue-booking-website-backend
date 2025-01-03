@@ -1,6 +1,6 @@
 ### Create Venue
 POST http://localhost:8080/api/venues
-Authorization: 2e39c1ab-583f-4a23-a707-743a48e52c2c
+Authorization: 9f1bd86e-090d-41f1-93dd-79240ce54a72
 Content-Type: application/json
 
 {
@@ -9,7 +9,7 @@ Content-Type: application/json
   "street": "Jalan Raya Sport No. 123",
   "district": "Kecamatan Sporty",
   "city_or_regency": "Kota Atletik",
-  "province": "Provinsi Kompetisi",
+  "province": "Bandung",
   "postal_code": "12345",
   "latitude": -6.200000,
   "longitude": 106.816666

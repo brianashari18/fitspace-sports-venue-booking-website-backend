@@ -18,4 +18,8 @@ public interface FieldScheduleRepository extends JpaRepository<FieldSchedule, Lo
     FieldSchedule findFirstByField(Field field);
     List<FieldSchedule> findAllBySchedule_DateBeforeAndStatus(LocalDate date, String status);
     Optional<FieldSchedule> findByFieldAndSchedule(Field field, Schedule schedule);
+
+    List<FieldSchedule> findAllBySchedule(Schedule schedule);
+
 }
+

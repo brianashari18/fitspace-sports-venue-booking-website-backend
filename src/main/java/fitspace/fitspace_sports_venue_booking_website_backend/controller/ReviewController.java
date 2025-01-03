@@ -31,8 +31,6 @@ public class ReviewController {
     public WebResponse<ReviewDataResponse> create(@PathVariable("fieldId") Integer fieldId , User user, @RequestBody ReviewAddRequest request){
         ReviewDataResponse reviewDataResponse = reviewService.create(fieldId,user,request);
 
-        log.info("DATA: {}", reviewDataResponse);
-
         return WebResponse.<ReviewDataResponse>builder()
                 .code(HttpStatus.OK.value())
                 .status(HttpStatus.OK.getReasonPhrase())

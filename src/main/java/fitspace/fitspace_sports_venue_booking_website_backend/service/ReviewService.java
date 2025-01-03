@@ -23,7 +23,6 @@ import java.util.Optional;
 @Service
 public class ReviewService {
 
-    private static final Logger log = LoggerFactory.getLogger(ReviewService.class);
     @Autowired
     private ValidationService validationService;
 
@@ -48,14 +47,10 @@ public class ReviewService {
 
         try {
             reviewRepository.save(review);
-            log.info("Review save   d for field ID {} by user ID {}", review.getField().getId(), review.getUser().getId());
 
         } catch (Exception e) {
-            log.error("Failed to save review: {}", e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error saving review");
         }
-
-        log.info("TEST: field ID {} by user ID {}", review.getField().getId(), review.getUser().getId());
 
         return EntityToDtoMapper.toReviewDataResponse(review);
     }
